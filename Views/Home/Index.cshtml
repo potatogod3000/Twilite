@@ -2,11 +2,20 @@
     ViewData["Title"] = "Home";
 }
 
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/index.css"/>
+</head>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome to Twilite</h1>
+    <h1 class="display-4">Welcome to Twilite@* ,UserName*@</h1>
 </div>
 
-<p>
-    <br/>
-    <button class="create-button">Create a New Post</button>
-</p>
+<div class="create-post card">
+    <div class="create-post-header-text card-header"> Create a New Post</div>
+    <textarea class="text-area" placeholder="Express your opinions here..."></textarea>
+
+    <div class="create-btn-div card-footer">
+        <button class="create-button button-caution">Cancel</button>
+        <button class="create-button button-primary">Post</button>
+    </div>
+</div>
