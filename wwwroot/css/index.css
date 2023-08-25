@@ -7,27 +7,6 @@
     text-align: center;
 }
 
-.text-area {
-    border-color: rgb(165, 219, 244);
-    color: rgb(165, 219, 244);
-    border-style: solid;
-    border-radius: 3px;
-    width: 100%;
-    transition: color 200ms, border-color 200ms;
-}
-
-.text-area:hover {
-    color:rgb( 3, 169, 244);
-    border-color: rgb( 3, 169, 244);
-}
-
-.text-area:focus {
-    color: rgb(0, 117, 172);
-    outline: none;
-    border-width: 2px;
-    border-color: rgb( 3, 169, 244);
-}
-
 .create-btn-div {
     text-align: right;
 }
