@@ -21,6 +21,48 @@ body {
   margin-bottom: 60px;
 }
 
+.text-area {
+  border-color: rgb(165, 219, 244);
+  color: rgb(165, 219, 244);
+  border-style: solid;
+  border-radius: 3px;
+  width: 100%;
+  transition: color 200ms, border-color 200ms;
+}
+
+.text-area:hover {
+  color:rgb( 3, 169, 244);
+  border-color: rgb( 3, 169, 244);
+}
+
+.text-area:focus {
+  color: rgb(0, 117, 172);
+  outline: none;
+  border-width: 2px;
+  border-color: rgb( 3, 169, 244);
+}
+
+.input-area {
+  border-color: rgb(165, 219, 244);
+  color: rgb(165, 219, 244);
+  border-style: solid;
+  border-radius: 3px;
+  width: 100%;
+  transition: color 200ms, border-color 200ms;
+}
+
+.input-area:hover {
+  color:rgb( 3, 169, 244);
+  border-color: rgb( 3, 169, 244);
+}
+
+.input-area:focus {
+  color: rgb(0, 117, 172);
+  outline: none;
+  border-width: 2px;
+  border-color: rgb( 3, 169, 244);
+}
+
 .button-primary {
   border-width: 2px;
   border-style: solid;
@@ -61,4 +103,22 @@ body {
 
 .button-caution:active {
   opacity: 0.7;
+}
+
+.link {
+  text-decoration: none;
+  color: rgb( 3, 169, 244);
+  transition: color 150ms, font-weight 150ms, text-decoration 150ms;
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: rgb( 3, 169, 244);
+  color: rgb( 3, 169, 244);
+  font-weight: bold;
+}
+
+.link:active {
+  opacity: 0.8;
 }
