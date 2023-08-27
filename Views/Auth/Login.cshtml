@@ -3,22 +3,43 @@
 }
 
 <div class="card">
-    <h4 class="card-header">Log into your Twilite Account</h4>
+    <h4 class="card-header text-center">Login to your Twilite Account</h4>
     <div class="card-body">
         <div class="input-group mb-3">
             <span class="input-group-text" id="addon-wrapping">Username</span>
-            <input type="text" class="form-control" placeholder="Enter Your Username..." aria-label="Username">
+            <input id="username-input" type="text" class="form-control" placeholder="Enter Your Username..." aria-label="Username">
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="addon-wrapping">Password</span>
-            <input type="password" class="form-control" placeholder="Enter Your Password..." aria-label="Password">
+            <input id="password-input" type="password" class="form-control" placeholder="Enter Your Password..." aria-label="Password">
         </div>
     </div>
     <div class="card-footer text-center">
-        <button class="button-primary btn-md">Login</button>
-        <button class="button-caution btn-md">Cancel</button>
+        <button id="login-button" class="button-primary btn-md">Login</button>
+        <button id="cancel-button" class="button-caution btn-md">Cancel</button>
         <div class="mt-2">
-            <a class="link" href="Register">I dont have an account</text>
+            <a class="link" href="Register">I dont have an account</text></a>
         </div>
     </div>
 </div>
+
+<div class="my-3">
+        <h4 class="text-center">or</h4>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="text-center">Login using the following services</h4>
+    </div>
+    <div class="card-body text-center">
+        <a href="https://accounts.google.com" target="_blank"><img class="me-3" src="~/Images/google-logo.png" width="64"/></a>
+        <a href="https://twitter.com/i/flow/login" target="_blank"><img class="me-3" src="~/Images/twilite.png" width="64"/></a>
+        <a href="https://auth.meta.com" target="_blank"><img class="me-3" src="~/Images/meta-logo.png" width="64"/></a>
+        <a href="https://login.live.com" target="_blank"><img class="me-3" src="~/Images/microsoft-logo.png" width="64"/></a>
+        <a href="https://www.github.com" target="_blank"><img class="me-3" src="~/Images/github-logo.png" width="64"/></a>
+        <a href="https://www.gitlab.com/users/sign_in" target="_blank"><img class="me-3" src="~/Images/gitlab-logo.png" width="64"/></a>
+    </div>
+</div>
+
+
+<script src="~/js/login.js"></script>
