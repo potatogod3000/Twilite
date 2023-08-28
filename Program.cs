@@ -1,7 +1,16 @@
+using Twilite.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Assigning ConnectionStrings:DatabaseConnection key-value pair stored in secrets.json
+var DatabaseConnection = builder.Configuration["ConnectionStrings:DatabaseConnection"];
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Accessing the ConnectionStrings:DatabaseConnection key-value pair and providing it to AppDbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DatabaseConnection));
 
 var app = builder.Build();
 

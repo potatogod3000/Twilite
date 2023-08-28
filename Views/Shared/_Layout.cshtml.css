@@ -16,7 +16,7 @@ li.nav-item::after {
   width: 0px;
   height: 2px;
   display: block;
-  background: rgb(3, 169, 244);
+  background: #0d6efd;
   transition: 150ms;
 }
 

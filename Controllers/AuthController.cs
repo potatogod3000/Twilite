@@ -1,25 +1,24 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Twilite.Data;
 using Twilite.Models;
 
 namespace Twilite.Controllers;
 
-public class AuthController : Controller
-{
-    private readonly ILogger<AuthController> _logger;
+public class AuthController : Controller {
+    //private readonly ILogger<AuthController> _logger;
+    
+    private readonly ApplicationDbContext _db;
 
-    public AuthController(ILogger<AuthController> logger)
-    {
-        _logger = logger;
+    public AuthController(ApplicationDbContext db) {
+        _db = db;
     }
 
-    public IActionResult Login()
-    {
+    public IActionResult Login() {
         return View();
     }
 
-    public IActionResult Register()
-    {
+    public IActionResult Register() {
+
         return View();
     }
 }
