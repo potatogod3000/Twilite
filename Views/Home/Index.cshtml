@@ -1,21 +1,33 @@
-﻿@{
+﻿@model List<PostInfoModel>
+
+@{
     ViewData["Title"] = "Home";
 }
-
-<head>
-    <link rel="stylesheet" type="text/css" href="~/css/index.css"/>
-</head>
 
 <div class="text-center">
     <h1 class="display-4">Welcome to Twilite@* ,UserName*@</h1>
 </div>
 
-<div class="create-post card">
-    <div class="create-post-header-text card-header"> Create a New Post</div>
-    <textarea class="text-area" placeholder="Express your opinions here..."></textarea>
+<h3 class="my-3">Create a New Post</h3>
+<div class="card">
+    <div class="mx-3 my-3">
+        <textarea class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..."></textarea>
+    </div>
 
-    <div class="create-btn-div card-footer">
-        <button class="create-button button-caution">Cancel</button>
-        <button class="create-button button-primary">Post</button>
+    <div class="create-btn-div card-footer text-center">
+        <button class="button-primary">Post</button>
+        <button class="button-caution">Cancel</button>
     </div>
 </div>
+
+<h3 class="my-3">Posts</h3>
+@foreach(var obj in Model) {
+    <div class="card my-3">
+        <div class="card-header">
+            <span class="float-start">&#x40;@obj.UserName</span><span class="float-end">Post ID: @obj.PostId </span>
+        </div>
+        <div class="card-body mx-2 my-1">
+            @obj.PostContent
+        </div>
+    </div>
+}

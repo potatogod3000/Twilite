@@ -1,3 +1,8 @@
+:root{
+  --accent-color: #6da7ff;
+  --main-color: #0d6efd;
+}
+
 html {
   font-size: 14px;
 }
@@ -9,7 +14,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--main-color);
 }
 
 html {
@@ -21,9 +26,13 @@ body {
   margin-bottom: 60px;
 }
 
+.form-control:hover {
+  border-color: var(--accent-color);
+}
+
 .text-area {
-  border-color: rgb(165, 219, 244);
-  color: rgb(165, 219, 244);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
   border-style: solid;
   border-radius: 3px;
   width: 100%;
@@ -31,15 +40,15 @@ body {
 }
 
 .text-area:hover {
-  color:rgb( 3, 169, 244);
-  border-color: rgb( 3, 169, 244);
+  color: var(--main-color);
+  border-color: var(--main-color);
 }
 
 .text-area:focus {
-  color: rgb(0, 117, 172);
+  color: var(--main-color);
   outline: none;
   border-width: 2px;
-  border-color: rgb( 3, 169, 244);
+  border-color: var(--main-color);
 }
 
 .input-area {
@@ -66,17 +75,17 @@ body {
 .button-primary {
   border-width: 2px;
   border-style: solid;
-  border-color: rgb( 3, 169, 244);
+  border-color: #0d6efd;
   border-radius: 3px;
   padding: 8px 8px 8px 8px;
-  color: rgb( 3, 169, 244);
+  color: #0d6efd;
   font-weight: bold;
   background-color: rgb( 255, 255, 255);
   transition: background-color 200ms, color 200ms, opacity 200ms;
 }
 
 .button-primary:hover {
-  background-color: rgb( 3, 169, 244);
+  background-color: #0d6efd;
   color: rgb( 255, 255, 255);
 }
 
@@ -107,15 +116,15 @@ body {
 
 .link {
   text-decoration: none;
-  color: rgb( 3, 169, 244);
+  color: #2a7fff;
   transition: color 150ms, font-weight 150ms, text-decoration 150ms;
 }
 
 .link:hover {
   text-decoration: underline;
   text-decoration-style: dashed;
-  text-decoration-color: rgb( 3, 169, 244);
-  color: rgb( 3, 169, 244);
+  text-decoration-color: #0d6efd;
+  color: #0d6efd;
   font-weight: bold;
 }
 
