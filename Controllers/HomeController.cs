@@ -1,21 +1,30 @@
-﻿using System.Diagnostics;
+﻿using System.Data.Common;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Twilite.Data;
 using Twilite.Models;
 
 namespace Twilite.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
+    /* private readonly ILogger<HomeController> _logger;
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
+    } */
+
+    private readonly ApplicationDbContext _db;
+
+    public HomeController(ApplicationDbContext db) {
+        _db = db;
     }
 
     public IActionResult Index()
     {
-        return View();
+        List<PostInfoModel> PostsListObj = _db.Posts.ToList();
+        
+        return View(PostsListObj);
     }
 
     public IActionResult Privacy()

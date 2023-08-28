@@ -5,7 +5,11 @@ using Twilite.Models;
 namespace Twilite.Controllers;
 
 public class AuthController : Controller {
-    //private readonly ILogger<AuthController> _logger;
+    /* private readonly ILogger<HomeController> _logger;
+    public HomeController(ILogger<HomeController> logger)
+    {
+        _logger = logger;
+    } */
     
     private readonly ApplicationDbContext _db;
 

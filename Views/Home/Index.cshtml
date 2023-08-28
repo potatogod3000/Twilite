@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<PostInfoModel>
+
+@{
     ViewData["Title"] = "Home";
 }
 
@@ -6,9 +8,9 @@
     <h1 class="display-4">Welcome to Twilite@* ,UserName*@</h1>
 </div>
 
+<h3 class="my-3">Create a New Post</h3>
 <div class="card">
     <div class="mx-3 my-3">
-        <label for="create-post-area" class="form-label fs-5 ms-1">Create a New Post</label>
         <textarea class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..."></textarea>
     </div>
 
@@ -17,3 +19,15 @@
         <button class="button-caution">Cancel</button>
     </div>
 </div>
+
+<h3 class="my-3">Posts</h3>
+@foreach(var obj in Model) {
+    <div class="card my-3">
+        <div class="card-header">
+            <span class="float-start">&#x40;@obj.UserName</span><span class="float-end">Post ID: @obj.PostId </span>
+        </div>
+        <div class="card-body mx-2 my-1">
+            @obj.PostContent
+        </div>
+    </div>
+}
