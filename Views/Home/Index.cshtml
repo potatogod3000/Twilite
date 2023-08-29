@@ -5,28 +5,30 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to Twilite@* ,UserName*@</h1>
+    <h1 class="display-4">Welcome to Twilite</h1>
 </div>
 
 <h3 class="my-3">Create a New Post</h3>
-<div class="card">
-    <div class="mx-3 my-3">
-        <textarea class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..."></textarea>
-    </div>
+<form method="post">
+    <div class="card">
+        <div class="mx-3 my-3">
+            <textarea class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..." maxlength="450"></textarea>
+        </div>
 
-    <div class="create-btn-div card-footer text-center">
-        <button class="button-primary">Post</button>
-        <button class="button-caution">Cancel</button>
+        <div class="create-btn-div card-footer text-center">
+            <button class="button-primary" type="submit">Post</button>
+            <button class="button-caution" type="reset">Cancel</button>
+        </div>
     </div>
-</div>
+</form>
 
 <h3 class="my-3">Posts</h3>
 @foreach(var obj in Model) {
-    <div class="card my-3">
+    <div class="card mb-2">
         <div class="card-header">
             <span class="float-start">&#x40;@obj.UserName</span><span class="float-end">Post ID: @obj.PostId </span>
         </div>
-        <div class="card-body mx-2 my-1">
+        <div class="card-body mx-2">
             @obj.PostContent
         </div>
     </div>
