@@ -1,27 +1,30 @@
+@model UserInfoModel
+
 @{
     ViewData["Title"] = "Login";
 }
-
-<div class="card">
-    <h4 class="card-header text-center">Login to your Twilite Account</h4>
-    <div class="card-body">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="addon-wrapping">Username</span>
-            <input id="username-input" type="text" class="form-control" placeholder="Enter Your Username..." aria-label="Username">
+<form method="post">
+    <div class="card">
+        <h4 class="card-header text-center">Login to your Twilite Account</h4>
+        <div class="card-body">
+            <div class="p-1 mb-1">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control mt-1 ms-2" placeholder="Enter Your Username..." aria-label="Username">
+            </div>
+            <div class="p-1 mb-1">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control mt-1 ms-2" placeholder="Enter Your Password..." aria-label="Password">
+            </div>
         </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="addon-wrapping">Password</span>
-            <input id="password-input" type="password" class="form-control" placeholder="Enter Your Password..." aria-label="Password">
+        <div class="card-footer text-center">
+            <button type="submit" class="button-primary btn-md">Login</button>
+            <button type="reset" class="button-caution btn-md">Cancel</button>
+            <div class="mt-2">
+                <a class="link" href="Register">I dont have an account</text></a>
+            </div>
         </div>
     </div>
-    <div class="card-footer text-center">
-        <button id="login-button" class="button-primary btn-md">Login</button>
-        <button id="cancel-button" class="button-caution btn-md">Cancel</button>
-        <div class="mt-2">
-            <a class="link" href="Register">I dont have an account</text></a>
-        </div>
-    </div>
-</div>
+</form>
 
 <div class="my-3">
         <h4 class="text-center">or</h4>

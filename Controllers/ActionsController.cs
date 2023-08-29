@@ -1,32 +1,36 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Twilite.Data;
 using Twilite.Models;
 
 namespace Twilite.Controllers;
 
 public class ActionsController : Controller
 {
-    private readonly ILogger<ActionsController> _logger;
-
+    /* private readonly ILogger<ActionsController> _logger;
     public ActionsController(ILogger<ActionsController> logger)
     {
         _logger = logger;
+    } */
+
+    private readonly ApplicationDbContext _db;
+
+    public ActionsController(ApplicationDbContext db) {
+        _db = db;
     }
 
-    public IActionResult Messages()
-    {
+    public IActionResult Messages() {
         return View();
     }
 
-    public IActionResult Notifications()
-    {
+    public IActionResult Notifications() {
         return View();
     }
 
-    public IActionResult Explore()
-    {
-        return View();
+    public IActionResult Explore() {
+        List<PostInfoModel> PostsListObj = _db.Posts.ToList();
+        return View(PostsListObj);
     }
 
     public IActionResult Lists()

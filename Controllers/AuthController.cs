@@ -1,4 +1,6 @@
+using System.Data.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Twilite.Data;
 using Twilite.Models;
 
@@ -21,7 +23,33 @@ public class AuthController : Controller {
         return View();
     }
 
+    /* [HttpPost]
+    public IActionResult Login(UserInfoModel model) {        
+    
+        if(_db.Users()) {
+            return RedirectToAction("Index", "Home");            
+        }
+
+        return View();
+    } */
+
     public IActionResult Register() {
+
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Register(UserInfoModel model) {
+
+        if(model.Password != null && model.UserName == model.Password) {
+            ModelState.AddModelError("password", "The User Name and the Password cannot be the same");
+        }
+
+        if(ModelState.IsValid) {
+            _db.Users.Add(model);
+            _db.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
 
         return View();
     }

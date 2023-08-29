@@ -1,45 +1,53 @@
+@model UserInfoModel
+
 @{
     ViewData["Title"] = "Register";
 }
 
-<div class="card">
-    <h4 class="card-header text-center">Register for a New Twilite Account</h4>
-    <div class="card-body">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="addon-wrapping">E-Mail</span>
-            <input type="email" class="form-control" placeholder="Enter Your E-Mail ID..." aria-label="EMail">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="addon-wrapping">Username</span>
-            <input type="text" class="form-control" placeholder="Enter a Username..." aria-label="Username">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="addon-wrapping">Password</span>
-            <input type="password" class="form-control" placeholder="Enter a Strong Password..." aria-label="Password">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="addon-wrapping">Re-enter Password</span>
-            <input type="password" class="form-control" placeholder="Enter a Strong Password..." aria-label="Password">
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Country</label>
-            <select class="form-select" id="inputGroupSelect01">
-                <option selected>Select Your Country...</option>
-                <option value="1">India</option>
-                <option value="2">United States of America</option>
-                <option value="3">Canada</option>
-                <option value="1">Germany</option>
-            </select>
+<form method="post">
+    <div class="card">
+        <h4 class="card-header text-center">Register for a New Twilite Account</h4>
+
+        <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="mb-1 p-1">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" type="email" class="form-control mt-1" placeholder="Enter Your E-Mail ID..." aria-label="EMail">
             </div>
-    </div>
-    <div class="card-footer text-center">
-        <button class="button-primary btn-md">Register</button>
-        <button class="button-caution btn-md">Cancel</button>
-        <div class="link mt-2">
-            <a class="link" href="Login">I already have an account</text></a>
+            <div class="mb-1 p-1">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" type="text" class="form-control mt-1" placeholder="Maximum of 24 characters" aria-label="Username">
+            </div>
+            <div class="mb-1 p-1">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" id="enterPassword" type="password" class="form-control mt-1" placeholder="Min - 8 and Max - 24 characters" aria-label="Password">
+            </div>
+            <div class="mb-1 p-1">
+                <label>Re-enter Password</label>
+                <input type="password" id="reEnterPassword" class="form-control mt-1" placeholder="Re-enter the same password" aria-label="Password" maxlength="24">
+                <span id="confirmMessage" class="confirmMessage"></span>
+            </div>
+            <div class="mb-1 p-1">
+                <label asp-for="Country">Country</label>
+                <select asp-for="Country"class="form-select mt-1" id="inputGroupSelect01">
+                    <option selected>Select Your Country...</option>
+                    <option value="1">India</option>
+                    <option value="2">United States of America</option>
+                    <option value="3">Canada</option>
+                    <option value="1">Germany</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card-footer text-center">
+            <button id="registerButton" type="submit" class="button-primary btn-md">Register</button>
+            <button class="button-caution btn-md" type="reset">Cancel</button>
+            <div class="link mt-2">
+                <a class="link" href="Login">I already have an account</text></a>
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 <div class="my-3">
         <h4 class="text-center">or</h4>
@@ -58,3 +66,5 @@
         <a href="https://www.gitlab.com/users/sign_in" target="_blank"><img class="my-2" src="~/Images/gitlab-logo.png" width="64"/></a>
     </div>
 </div>
+
+<script src="~/js/register.js"></script>

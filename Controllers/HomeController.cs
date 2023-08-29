@@ -6,8 +6,7 @@ using Twilite.Models;
 
 namespace Twilite.Controllers;
 
-public class HomeController : Controller
-{
+public class HomeController : Controller {
     /* private readonly ILogger<HomeController> _logger;
     public HomeController(ILogger<HomeController> logger)
     {
@@ -20,20 +19,26 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index()
-    {
+    public IActionResult Index() {
         List<PostInfoModel> PostsListObj = _db.Posts.ToList();
-        
+
         return View(PostsListObj);
     }
 
-    public IActionResult Privacy()
-    {
+    /* [HttpPost]
+    public IActionResult Index(PostInfoModel model) {
+        _db.Posts.Add(model);
+        _db.SaveChanges();
+        List<PostInfoModel> PostsListObj = _db.Posts.ToList();
+
+        return View(PostsListObj);
+    } */
+
+    public IActionResult Privacy() {
         return View();
     }
 
-    public IActionResult About()
-    {
+    public IActionResult About() {
         return View();
     }
 
