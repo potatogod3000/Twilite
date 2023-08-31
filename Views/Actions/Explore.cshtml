@@ -1,5 +1,3 @@
-@model List<PostInfoModel>
-
 @{
     ViewData["Title"] = "Explore";
 }
@@ -8,13 +6,6 @@
     <h1 class="display-4 mb-4">Explore Twilite</h1>
 </div>
 
-@foreach(var obj in Model) {
-    <div class="card my-2">
-        <div class="card-header">
-            <span class="float-start">&#x40;@obj.UserName</span><span class="float-end">Post ID: @obj.PostId </span>
-        </div>
-        <div class="card-body mx-2">
-            @obj.PostContent
-        </div>
-    </div>
-}
+<div id="posts-area">
+    @await Component.InvokeAsync("Posts")
+</div>

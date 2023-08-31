@@ -131,3 +131,12 @@ body {
 .link:active {
   opacity: 0.8;
 }
+
+.external-icons {
+  width: 32px;
+  transition: width 150ms;
+}
+
+.external-icons:hover {
+  width: 48px;
+}
