@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Twilite.Data;
 using Twilite.Models;
 
@@ -8,19 +9,15 @@ namespace Twilite.Controllers;
 
 public class ActionsController : Controller
 {
-    /* private readonly ILogger<ActionsController> _logger;
+    private readonly ILogger<ActionsController> _logger;
+ 
     public ActionsController(ILogger<ActionsController> logger)
     {
         _logger = logger;
-    } */
-
-    private readonly ApplicationDbContext _db;
-
-    public ActionsController(ApplicationDbContext db) {
-        _db = db;
     }
 
-    public IActionResult Messages() {
+    public IActionResult Explore() {
+
         return View();
     }
 
@@ -28,18 +25,7 @@ public class ActionsController : Controller
         return View();
     }
 
-    public IActionResult Explore() {
-        List<PostInfoModel> PostsListObj = _db.Posts.ToList();
-        return View(PostsListObj);
-    }
-
-    public IActionResult Lists()
-    {
-        return View();
-    }
-
-    public IActionResult Bookmarks()
-    {
+    public IActionResult Messages() {
         return View();
     }
 
@@ -50,11 +36,6 @@ public class ActionsController : Controller
 
     // [Authorize]
     public IActionResult Profile()
-    {
-        return View();
-    }
-
-    public IActionResult More()
     {
         return View();
     }

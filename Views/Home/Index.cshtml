@@ -1,6 +1,4 @@
-﻿@model List<PostInfoModel>
-
-@{
+﻿@{
     ViewData["Title"] = "Home";
 }
 
@@ -9,27 +7,13 @@
 </div>
 
 <h3 class="my-3">Create a New Post</h3>
-<form method="post">
-    <div class="card">
-        <div class="mx-3 my-3">
-            <textarea class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..." maxlength="450"></textarea>
-        </div>
-
-        <div class="create-btn-div card-footer text-center">
-            <button class="button-primary" type="submit">Post</button>
-            <button class="button-caution" type="reset">Cancel</button>
-        </div>
-    </div>
-</form>
+<div id="create-post-area">
+    <partial name="_CreatePost" />
+</div>
 
 <h3 class="my-3">Posts</h3>
-@foreach(var obj in Model) {
-    <div class="card mb-2">
-        <div class="card-header">
-            <span class="float-start">&#x40;@obj.UserName</span><span class="float-end">Post ID: @obj.PostId </span>
-        </div>
-        <div class="card-body mx-2">
-            @obj.PostContent
-        </div>
-    </div>
-}
+
+<div id="posts-area">
+    @await Component.InvokeAsync("Posts")
+</div>
+
