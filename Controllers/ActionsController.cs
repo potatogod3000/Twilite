@@ -11,8 +11,8 @@ public class ActionsController : Controller
 {
     private readonly ILogger<ActionsController> _logger;
  
-    public ActionsController(ILogger<ActionsController> logger)
-    {
+    public ActionsController(ILogger<ActionsController> logger) {
+
         _logger = logger;
     }
 
@@ -29,14 +29,12 @@ public class ActionsController : Controller
         return View();
     }
 
-    public IActionResult Communities()
-    {
+    public IActionResult Communities() {
         return View();
     }
 
     // [Authorize]
-    public IActionResult Profile()
-    {
+    public IActionResult Profile() {
         return View();
     }
 

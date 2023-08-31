@@ -7,13 +7,20 @@
 </div>
 
 <h3 class="my-3">Create a New Post</h3>
-<div id="create-post-area">
+<div id="create-post-area" class="container-fluid">
     <partial name="_CreatePost" />
 </div>
 
 <h3 class="my-3">Posts</h3>
-
-<div id="posts-area">
-    @await Component.InvokeAsync("Posts")
+<div class="container-fluid">
+    <div id="posts-area" class="row justify-content-center">
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+    </div>
 </div>
 

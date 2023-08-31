@@ -6,6 +6,11 @@
     <h1 class="display-4 mb-4">Explore Twilite</h1>
 </div>
 
-<div id="posts-area">
-    @await Component.InvokeAsync("Posts")
+<div class="container-fluid">
+    <div id="posts-area" class="row justify-content-center">
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts")
+    </div>
 </div>

@@ -1,12 +1,21 @@
 @model IEnumerable<PostInfoModel>
 
 @foreach(var obj in Model) {
-    <div class="card mb-2">
-        <div class="card-header">
-            <span class="float-start">&#x40;@obj.UserName</span><span class="float-end">Post ID: @obj.PostId </span>
-        </div>
-        <div class="card-body mx-2">
-            @obj.PostContent
+    <div class="card col-md-5 mx-2 my-2">
+        <div class="card-body">
+
+            <h5 class="card-title text-primary">
+                <div class=" card-title float-start">&#x40;@obj.UserName</div>
+            </h5>
+
+
+            <p class="card-subtitle mb-2 text-muted">
+                <h6 class="float-end">Post ID: @obj.PostId</h6>
+                <br/><hr/>
+            </p>
+
+            <p class="card-text">@obj.PostContent</p>
+            <a asp-controller="Actions" asp-action="Edit" class="float-end link">Edit</a>
         </div>
     </div>
 }
