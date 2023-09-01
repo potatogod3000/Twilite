@@ -1,25 +1,28 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<IdentityUser> UserManager
+
+@{
     ViewData["Title"] = "Home";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to Twilite</h1>
+    <h2 class="display-4">Welcome to Twilite, 
+        @if(User.Identity.IsAuthenticated) {
+            Write(UserManager.GetUserName(User));
+        }
+    </h2>
 </div>
 
 <h3 class="my-3">Create a New Post</h3>
 <div id="create-post-area" class="container-fluid">
-    <partial name="_CreatePost" />
+    <div asp-asp-validation-summary="All"></div>
+    <partial name="_CreatePost">
 </div>
 
 <h3 class="my-3">Posts</h3>
 <div class="container-fluid">
     <div id="posts-area" class="row justify-content-center">
-        @await Component.InvokeAsync("Posts")
-        @await Component.InvokeAsync("Posts")
-        @await Component.InvokeAsync("Posts")
-        @await Component.InvokeAsync("Posts")
-        @await Component.InvokeAsync("Posts")
-        @await Component.InvokeAsync("Posts")
         @await Component.InvokeAsync("Posts")
     </div>
 </div>

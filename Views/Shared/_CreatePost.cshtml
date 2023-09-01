@@ -1,11 +1,13 @@
+@model PostInfoModel
+
 <form method="post" class="row justify-content-center">
     <div class="card border-0">
         <div class="my-2">
-            <textarea class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..." maxlength="450"></textarea>
+            <textarea asp-for="PostContent" class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..." maxlength="450"></textarea>
         </div>
 
         <div class="text-end mb-2">
-            <button class="button-primary" type="submit">Post</button>
+            <button class="button-primary" type="submit" method="post" asp-controller="Post" asp-action="CreatePost" asp-route-Post="@Model">Post</button>
         </div>
     </div>
 </form>

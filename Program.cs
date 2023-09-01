@@ -1,16 +1,22 @@
-using Twilite.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Twilite.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Assigning ConnectionStrings:DatabaseConnection key-value pair stored in secrets.json
 var DatabaseConnection = builder.Configuration["ConnectionStrings:DatabaseConnection"];
 
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DatabaseConnection));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 // Accessing the ConnectionStrings:DatabaseConnection key-value pair and providing it to AppDbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DatabaseConnection));
+//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DatabaseConnection));
 
 var app = builder.Build();
 
@@ -27,7 +33,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

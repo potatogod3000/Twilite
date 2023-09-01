@@ -15,7 +15,10 @@
             </p>
 
             <p class="card-text">@obj.PostContent</p>
-            <a asp-controller="Actions" asp-action="Edit" class="float-end link">Edit</a>
+            @if(User.Identity.IsAuthenticated && User.Identity.Name == obj.UserName) {
+                <a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@obj.PostId" class="float-end link">Edit</a>
+            }
+
         </div>
     </div>
 }

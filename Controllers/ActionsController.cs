@@ -2,17 +2,16 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Twilite.Data;
 using Twilite.Models;
 
 namespace Twilite.Controllers;
 
-public class ActionsController : Controller
-{
+public class ActionsController : Controller {
+    
     private readonly ILogger<ActionsController> _logger;
- 
-    public ActionsController(ILogger<ActionsController> logger) {
 
+    public ActionsController(ILogger<ActionsController> logger) {
+        
         _logger = logger;
     }
 
@@ -21,20 +20,18 @@ public class ActionsController : Controller
         return View();
     }
 
+    [Authorize]
     public IActionResult Notifications() {
         return View();
     }
 
+    [Authorize]
     public IActionResult Messages() {
         return View();
     }
 
+    [Authorize]
     public IActionResult Communities() {
-        return View();
-    }
-
-    // [Authorize]
-    public IActionResult Profile() {
         return View();
     }
 
