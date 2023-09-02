@@ -72,7 +72,7 @@ body {
   border-color: rgb( 3, 169, 244);
 }
 
-.button-primary {
+.btn-primary {
   border-width: 2px;
   border-style: solid;
   border-color: #0d6efd;
@@ -84,16 +84,16 @@ body {
   transition: background-color 200ms, color 200ms, opacity 200ms;
 }
 
-.button-primary:hover {
+.btn-primary:hover {
   background-color: #0d6efd;
   color: rgb( 255, 255, 255);
 }
 
-.button-primary:active {
+.btn-primary:active {
   opacity: 0.7;
 }
 
-.button-caution {
+.btn-danger {
   border-width: 2px;
   border-style: solid;
   border-color: red;
@@ -105,12 +105,12 @@ body {
   transition: background-color 200ms, color 200ms, opacity 100ms;
 }
 
-.button-caution:hover {
+.btn-danger:hover {
   background-color: red;
   color: rgb( 255, 255, 255);
 }
 
-.button-caution:active {
+.btn-danger:active {
   opacity: 0.7;
 }
 
