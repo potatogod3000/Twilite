@@ -17,7 +17,7 @@
             <p class="card-text">@obj.PostContent</p>
             @if(User.Identity.IsAuthenticated && User.Identity.Name == obj.UserName) {
                 <a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@obj.PostId" class="float-end link">Edit</a>
-                <a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@obj.PostId" class="float-end link text-danger mx-2">Delete</a>
+                <a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@obj.PostId" class="float-end link-danger mx-2">Delete</a>
             }
 
         </div>

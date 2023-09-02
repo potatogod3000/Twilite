@@ -17,11 +17,12 @@ public class PostController : Controller {
     [Authorize]
     [HttpPost]
     public IActionResult CreatePost(PostInfoModel Post) {
+        Post.UserName = User.Identity.Name;
 
-        if(User.Identity.IsAuthenticated && Post.PostContent != null) {
-            
-            Post.UserName = User.Identity.Name;
-    
+        if(Post.PostContent == null) {
+            ModelState.AddModelError("", "You haven't entered anything in the input area.");
+        }
+        else {
             _db.Posts.Update(Post);
             _db.SaveChanges();
             return RedirectToAction("Explore", "Actions");        
@@ -51,14 +52,23 @@ public class PostController : Controller {
     [Authorize]
     [HttpPost]
     public IActionResult EditPost(PostInfoModel Post) {
+        int? PostId = Post.PostId;
+        PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
 
-        if(Post.UserName == User.Identity.Name) {
+        if(PostInfoObj.PostContent == Post.PostContent) {
+            ModelState.AddModelError("", "You haven't made any changes to this post.");
+        }
+
+        if(Post.UserName == User.Identity.Name && ModelState.IsValid) {
+            // Clear all previous tracking of the ApplicationDbContext _db
+            _db.ChangeTracker.Clear();
+            
             _db.Posts.Update(Post);
             _db.SaveChanges();
             return RedirectToAction("Explore", "Actions");
         }   
 
-        return View();
+        return View(PostInfoObj);
     }
 
     [HttpPost]
