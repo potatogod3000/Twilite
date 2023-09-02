@@ -13,7 +13,26 @@ public class PostController : Controller {
         _db = db;
     }
 
+
     [Authorize]
+    [HttpPost]
+    public IActionResult CreatePost(PostInfoModel Post) {
+
+        if(User.Identity.IsAuthenticated && Post.PostContent != null) {
+            
+            Post.UserName = User.Identity.Name;
+    
+            _db.Posts.Update(Post);
+            _db.SaveChanges();
+            return RedirectToAction("Explore", "Actions");        
+        }
+        
+        return RedirectToAction("Index", "Home");
+    }
+
+
+    [Authorize]
+    [HttpGet]
     public IActionResult EditPost(int? PostId) {
         if(PostId == null || PostId == 0) {
             
@@ -29,35 +48,46 @@ public class PostController : Controller {
         return View(PostInfoObj);
     }
 
-    /* [Authorize]
+    [Authorize]
     [HttpPost]
     public IActionResult EditPost(PostInfoModel Post) {
+
         if(Post.UserName == User.Identity.Name) {
             _db.Posts.Update(Post);
             _db.SaveChanges();
             return RedirectToAction("Explore", "Actions");
-        }
-        
+        }   
 
         return View();
-    } */
+    }
 
-    [Authorize]
     [HttpPost]
-    public IActionResult CreatePost(PostInfoModel Post) {
-
-        if(User.Identity.IsAuthenticated) {
-            Post.UserName = User.Identity.Name;
-            /* PostInfoModel PostInfoObj = new PostInfoModel() {
-                PostInfoObj.UserName = User.Identity.Name;
-                }; */
+    [Authorize]
+    public IActionResult DeletePost(PostInfoModel Post) {
         
-            _db.Posts.Update(Post);
+        if(User.Identity.Name == Post.UserName) {
+            _db.Posts.Remove(Post);
             _db.SaveChanges();
             return RedirectToAction("Explore", "Actions");
-            
+        }
+        return RedirectToAction("Explore", "Actions");
+    }
+
+    [HttpGet]
+    [Authorize]
+    public IActionResult DeletePost(int? PostId) {
+
+        if(PostId == null || PostId == 0) {
+            return RedirectToAction("Explore", "Actions");
         }
         
-        return RedirectToAction("Index", "Home");
+        PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
+
+        if(PostInfoObj == null) {
+            return RedirectToAction("Explore", "Actions");
+        }
+
+        return View(PostInfoObj);
     }
+
 }

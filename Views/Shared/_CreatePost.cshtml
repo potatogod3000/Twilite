@@ -2,12 +2,17 @@
 
 <form method="post" class="row justify-content-center">
     <div class="card border-0">
+        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="my-2">
             <textarea asp-for="PostContent" class="form-control" id="create-post-area" rows="3" placeholder="Express your opinions here..." maxlength="450"></textarea>
         </div>
 
         <div class="text-end mb-2">
-            <button class="button-primary" type="submit" method="post" asp-controller="Post" asp-action="CreatePost" asp-route-Post="@Model">Post</button>
+            <button class="btn-primary" type="submit" method="post" asp-controller="Post" asp-action="CreatePost" asp-route-Post="@Model">Post</button>
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <partial name="=_ValidationScriptsPartial" />
+}

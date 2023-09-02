@@ -12,11 +12,11 @@
         
         <div class="my-2">
             <h5 class="text-primary">&#x40;@Model.UserName</h5>
-            <textarea method="post" asp-for="PostContent" class="form-control" id="create-post-area" rows="3" maxlength="450"></textarea>
+            <textarea asp-for="PostContent" class="form-control" id="create-post-area" rows="3" maxlength="450"></textarea>
         </div>
 
         <div class="text-end mb-2">
-            <button class="button-primary" type="submit" method="post" asp-controller="Post" asp-action="EditPost" asp-route-Post="@Model">Update</button>
+            <button class="btn-primary" type="submit" asp-route-UserName="@Model.UserName" asp-route-PostId="@Model.PostId">Update</button>
         </div>
     </div>
 </form>
