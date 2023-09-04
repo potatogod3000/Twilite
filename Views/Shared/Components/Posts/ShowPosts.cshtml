@@ -5,20 +5,25 @@
         <div class="card-body">
 
             <h5 class="card-title text-primary">
-                <div class=" card-title float-start">&#x40;@obj.UserName</div>
+                <div class=" card-title float-start">
+                    <span class="dropdown">
+                        <a class="btn btn-outline-primary border-0 dropdown-toggle px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            &#x40;@obj.UserName
+                        </a>
+                        <ul class="dropdown-menu">
+                            @if(User.Identity.IsAuthenticated && User.Identity.Name == obj.UserName) {
+                                <li><a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@obj.PostId" class="dropdown-item text-primary">Edit</a></li>
+                                <li><a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@obj.PostId" class="dropdown-item text-danger">Delete</a></li>
+                            }
+                            <li><a class="dropdown-item" href="#">Follow</a></li>
+                        </ul>
+                    </span>
+                </div>
             </h5>
 
-
-            <p class="card-subtitle mb-2 text-muted">
-                <h6 class="float-end">Post ID: @obj.PostId</h6>
-                <br/><hr/>
-            </p>
+            <br/><hr/>
 
             <p class="card-text">@obj.PostContent</p>
-            @if(User.Identity.IsAuthenticated && User.Identity.Name == obj.UserName) {
-                <a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@obj.PostId" class="float-end link">Edit</a>
-                <a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@obj.PostId" class="float-end link text-danger mx-2">Delete</a>
-            }
 
         </div>
     </div>

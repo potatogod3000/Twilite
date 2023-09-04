@@ -72,7 +72,7 @@ body {
   border-color: rgb( 3, 169, 244);
 }
 
-.btn-primary {
+#bs-override.btn-primary {
   border-width: 2px;
   border-style: solid;
   border-color: #0d6efd;
@@ -84,33 +84,33 @@ body {
   transition: background-color 200ms, color 200ms, opacity 200ms;
 }
 
-.btn-primary:hover {
+#bs-override.btn-primary:hover {
   background-color: #0d6efd;
   color: rgb( 255, 255, 255);
 }
 
-.btn-primary:active {
+#bs-override.btn-primary:active {
   opacity: 0.7;
 }
 
-.btn-danger {
+#bs-override.btn-danger {
   border-width: 2px;
   border-style: solid;
-  border-color: red;
+  border-color: rgb(220, 53, 69);
   border-radius: 3px;
   padding: 8px 8px 8px 8px;
-  color: red;
+  color: rgb(220, 53, 69);
   font-weight: bold;
   background-color: rgb( 255, 255, 255);
   transition: background-color 200ms, color 200ms, opacity 100ms;
 }
 
-.btn-danger:hover {
-  background-color: red;
+#bs-override.btn-danger:hover {
+  background-color: rgb(220, 53, 69);
   color: rgb( 255, 255, 255);
 }
 
-.btn-danger:active {
+#bs-override.btn-danger:active {
   opacity: 0.7;
 }
 
@@ -129,6 +129,24 @@ body {
 }
 
 .link:active {
+  opacity: 0.8;
+}
+
+.link-danger {
+  text-decoration: none;
+  color: rgb(220, 53, 69);
+  transition: color 150ms, font-weight 150ms, text-decoration 150ms;
+}
+
+.link-danger:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: rgb(220, 53, 69);
+  color: rgb(220, 53, 69);
+  font-weight: bold;
+}
+
+.link-danger:active {
   opacity: 0.8;
 }
 
