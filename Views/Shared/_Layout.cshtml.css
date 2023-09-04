@@ -7,21 +7,8 @@ a.navbar-brand {
   word-break: break-all;
 }
 
-li.nav-item {
-  display: inline-block;
-}
-
-li.nav-item::after {
-  content: '';
-  width: 0px;
-  height: 2px;
-  display: block;
-  background: #0d6efd;
-  transition: 150ms;
-}
-
 li.nav-item:hover::after {
-  width: 100%;
+  color: brown;
 }
 
 .btn-primary {

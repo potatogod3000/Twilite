@@ -1,9 +1,20 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
 @{
     ViewData["Title"] = "Explore";
 }
 
 <div class="text-center">
-    <h1 class="display-4 mb-4">Explore Twilite</h1>
+    @{
+        if(SignInManager.IsSignedIn(User)) {
+            <h1 class="display-4 mb-4">Welcome back, @User.Identity.Name!</h1>
+        }
+        else {
+            <h1 class="display-4 mb-4">Explore Twilite</h1>
+        }
+    }
+    
 </div>
 
 <div class="container-fluid">

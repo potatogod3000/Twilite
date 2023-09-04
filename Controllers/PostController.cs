@@ -34,6 +34,12 @@ public class PostController : Controller {
 
     [Authorize]
     [HttpGet]
+    public IActionResult CreatePost() {
+        return View();
+    }
+
+    [Authorize]
+    [HttpGet]
     public IActionResult EditPost(int? PostId) {
         if(PostId == null || PostId == 0) {
             

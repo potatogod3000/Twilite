@@ -16,4 +16,6 @@ public class PostInfoModel {
     [MaxLength(450)]
     [MinLength(2, ErrorMessage = "You must enter atleast 2 characters to be able to Post this message")]
     public string PostContent { get; set; }
+
+    public List<string>? Following { get; set; }
 }
