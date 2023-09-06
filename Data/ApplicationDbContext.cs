@@ -11,6 +11,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     public DbSet<PostInfoModel> Posts {get; set; }
 
+    public DbSet<UserProfileModel> UserProfiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
 

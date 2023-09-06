@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using Twilite.Data;
+using Twilite.Models;
 
 namespace Twilite.Areas.Identity.Pages.Account
 {
@@ -33,13 +35,15 @@ namespace Twilite.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _db;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -47,6 +51,7 @@ namespace Twilite.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _db = db;
         }
 
         [BindProperty]
@@ -117,6 +122,15 @@ namespace Twilite.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    // Create User Profile DbSet on Registration
+                    UserProfileModel userProfile = new()
+                    {
+                        UserName = Input.UserName
+                    };
+                    _db.Update(userProfile);
+                    _db.SaveChanges();
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

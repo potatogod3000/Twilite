@@ -108,20 +108,35 @@ public class PostController : Controller {
 
     [Authorize]
     [HttpGet]
-    public IActionResult AddFollower(string UserName, string FollowerName) {
-        PostInfoModel PostInfoObj = _db.Posts.FirstOrDefault(x => x.UserName == UserName);
+    public IActionResult AddFollower(string PostUserName, string CurrentUserName) {
+        // Add Following info to Post's User
+        UserProfileModel PostUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == PostUserName);
         
-        if(PostInfoObj == null) {
+        if(PostUserProfile == null) {
             return BadRequest();
         }
 
-        PostInfoObj.Following ??= new List<string>();
-
-        if(PostInfoObj.UserName != FollowerName && !PostInfoObj.Following.Contains(FollowerName)) {
-            PostInfoObj.Following.Add(FollowerName);
+        if(PostUserProfile.UserName != CurrentUserName && !PostUserProfile.Followers.Contains(CurrentUserName)) {
+            PostUserProfile.Followers.Add(CurrentUserName);
 
             if(ModelState.IsValid) {
-                _db.Update(PostInfoObj);
+                _db.Update(PostUserProfile);
+                _db.SaveChanges();
+            }
+        }
+
+        // Add Follower info to Post's User
+        UserProfileModel CurrentUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == CurrentUserName);
+
+        if(CurrentUserProfile == null) {
+            return BadRequest();
+        }
+
+        if(CurrentUserProfile.UserName != PostUserName && !CurrentUserProfile.Following.Contains(PostUserName)) {
+            CurrentUserProfile.Following.Add(PostUserName);
+
+            if(ModelState.IsValid) {
+                _db.Update(CurrentUserProfile);
                 _db.SaveChanges();
             }
         }
@@ -131,15 +146,28 @@ public class PostController : Controller {
 
     [Authorize]
     [HttpGet]
-    public IActionResult RemoveFollower(string UserName, string FollowerName) {
-        PostInfoModel PostInfoObj = _db.Posts.FirstOrDefault(x => x.UserName == UserName);
+    public IActionResult RemoveFollower(string PostUserName, string CurrentUserName) {
+        // Remove Following info from Post's User
+        UserProfileModel PostUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == PostUserName);
         
-        if(PostInfoObj.Following.Contains(FollowerName)) {
-            PostInfoObj.Following.Remove(FollowerName);
+        if(PostUserProfile.Followers.Contains(CurrentUserName)) {
+            PostUserProfile.Followers.Remove(CurrentUserName);
         }
         
         if(ModelState.IsValid) {
-                _db.Update(PostInfoObj);
+                _db.Update(PostUserProfile);
+                _db.SaveChanges();
+        }
+
+        // Remove Follower info from Post's User
+        UserProfileModel CurrentUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == CurrentUserName);
+        
+        if(CurrentUserProfile.Following.Contains(PostUserName)) {
+            CurrentUserProfile.Following.Remove(PostUserName);
+        }
+        
+        if(ModelState.IsValid) {
+                _db.Update(CurrentUserProfile);
                 _db.SaveChanges();
         }
         
