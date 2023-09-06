@@ -6,6 +6,10 @@ namespace Twilite.Models;
 public class PostInfoModel {
     private static readonly UserManager<IdentityUser> UserManager;
 
+    public PostInfoModel() {
+        Following ??= new List<string>();
+    }
+    
     [Key]
     public int? PostId { get; set; }
 
