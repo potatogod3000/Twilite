@@ -1,3 +1,4 @@
+using System.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 using Twilite.Data;
 using Twilite.Models;
@@ -13,8 +14,9 @@ public class PostsViewComponent : ViewComponent {
     }
 
     public IViewComponentResult Invoke() {
-        List<PostInfoModel> PostInfoObj = _db.Posts.ToList();
+        ViewData["PostInfoObj"] = _db.Posts.ToList();
+        ViewData["UserProfiles"] = _db.UserProfiles.ToList();
         
-        return View("ShowPosts", PostInfoObj);
+        return View("ShowPosts", ViewData);
     }
 }

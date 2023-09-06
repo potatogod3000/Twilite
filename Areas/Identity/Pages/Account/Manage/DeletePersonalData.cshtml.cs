@@ -86,6 +86,24 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
                 _db.SaveChanges();
             }
 
+            // Delete User Profile info
+            UserProfileModel UserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == user.UserName);
+            _db.Remove(UserProfile);
+            _db.SaveChanges();
+
+            // Delete User's Following and Followers
+            List<UserProfileModel> UserProfiles = _db.UserProfiles.ToList();
+            foreach(var profile in UserProfiles) {
+                if(profile.Following.Contains(user.UserName)) {
+                    profile.Following.Remove(user.UserName);
+                }
+                if(profile.Followers.Contains(user.UserName)) {
+                    profile.Followers.Remove(user.UserName);
+                }
+            _db.Update(profile);
+            }
+            _db.SaveChanges();
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");

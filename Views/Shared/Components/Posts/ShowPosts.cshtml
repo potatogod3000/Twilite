@@ -1,6 +1,11 @@
-@model IEnumerable<PostInfoModel>
+@{
 
-@foreach(var obj in Model) {
+   IEnumerable<PostInfoModel> PostInfoObj = ViewData["PostInfoObj"] as IEnumerable<PostInfoModel>;
+   IEnumerable<UserProfileModel> UserProfiles = ViewData["UserProfiles"] as IEnumerable<UserProfileModel>;
+}
+
+@foreach(var obj in PostInfoObj) {
+    var CurrentUserProfile = UserProfiles.FirstOrDefault(x => x.UserName == User.Identity.Name);
     <div class="card col-md-5 mx-2 my-2">
         <div class="card-body">
 
@@ -34,12 +39,12 @@
                                     </a></li>
 
                                     
-                                    if(@* obj.Following != null &&  *@obj.Following.Contains(User.Identity.Name)) {
-                                        <li><a class="dropdown-item text-danger" asp-controller="Post" asp-action="RemoveFollower" asp-route-UserName=@obj.UserName asp-route-FollowerName="@User.Identity.Name">
+                                    if(CurrentUserProfile.Following.Contains(@obj.UserName)) {
+                                        <li><a class="dropdown-item text-danger" asp-controller="Post" asp-action="RemoveFollower" asp-route-PostUserName=@obj.UserName asp-route-CurrentUserName="@User.Identity.Name">
                                             <i class="bi bi-person-dash-fill me-2"></i>Un-Follow
                                         </a></li>
                                     } else {
-                                        <li><a class="dropdown-item" asp-controller="Post" asp-action="AddFollower" asp-route-UserName=@obj.UserName asp-route-FollowerName="@User.Identity.Name">
+                                        <li><a class="dropdown-item" asp-controller="Post" asp-action="AddFollower" asp-route-PostUserName=@obj.UserName asp-route-CurrentUserName="@User.Identity.Name">
                                             <i class="bi bi-person-plus me-2"></i>Follow
                                         </a></li>
                                     }
