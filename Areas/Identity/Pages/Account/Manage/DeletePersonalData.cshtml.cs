@@ -19,15 +19,18 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ApplicationDbContext _db;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
         }
 
         /// <summary>
@@ -73,6 +76,15 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            
+            // Delete the user's posts on account deletion.
+            List<PostInfoModel> UserPosts = _db.Posts.Where(x => x.UserName == user.UserName).ToList();
+            if(UserPosts.Count > 0) {
+                foreach(var post in UserPosts) {
+                    _db.Remove(post);
+                }
+                _db.SaveChanges();
+            }
 
             if (user == null)
             {
