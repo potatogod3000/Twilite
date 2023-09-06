@@ -106,4 +106,44 @@ public class PostController : Controller {
         return View(PostInfoObj);
     }
 
+    [Authorize]
+    [HttpGet]
+    public IActionResult AddFollower(string UserName, string FollowerName) {
+        PostInfoModel PostInfoObj = _db.Posts.FirstOrDefault(x => x.UserName == UserName);
+        
+        if(PostInfoObj == null) {
+            return BadRequest();
+        }
+
+        PostInfoObj.Following ??= new List<string>();
+
+        if(PostInfoObj.UserName != FollowerName && !PostInfoObj.Following.Contains(FollowerName)) {
+            PostInfoObj.Following.Add(FollowerName);
+
+            if(ModelState.IsValid) {
+                _db.Update(PostInfoObj);
+                _db.SaveChanges();
+            }
+        }
+
+        return RedirectToAction("Explore", "Actions");
+    }
+
+    [Authorize]
+    [HttpGet]
+    public IActionResult RemoveFollower(string UserName, string FollowerName) {
+        PostInfoModel PostInfoObj = _db.Posts.FirstOrDefault(x => x.UserName == UserName);
+        
+        if(PostInfoObj.Following.Contains(FollowerName)) {
+            PostInfoObj.Following.Remove(FollowerName);
+        }
+        
+        if(ModelState.IsValid) {
+                _db.Update(PostInfoObj);
+                _db.SaveChanges();
+        }
+        
+        return RedirectToAction("Explore", "Actions");
+    }
+
 }
