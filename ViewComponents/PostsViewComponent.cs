@@ -13,10 +13,8 @@ public class PostsViewComponent : ViewComponent {
         _db = db;
     }
 
-    public IViewComponentResult Invoke() {
-        ViewData["PostInfoObj"] = _db.Posts.ToList();
-        ViewData["UserProfiles"] = _db.UserProfiles.ToList();
-        
+    public IViewComponentResult Invoke(IEnumerable<PostInfoModel> Posts) {
+        ViewData["PostInfoObj"] = Posts;
         return View("ShowPosts", ViewData);
     }
 }
