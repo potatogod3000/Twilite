@@ -1,8 +1,9 @@
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager;
 
 @{
     ViewData["Title"] = "Explore";
+    IEnumerable<PostInfoModel> Posts = ViewData["Posts"] as IEnumerable<PostInfoModel>;
 }
 
 <div class="text-center">
@@ -19,6 +20,6 @@
 
 <div class="container-fluid">
     <div id="posts-area" class="row justify-content-center">
-        @await Component.InvokeAsync("Posts")
+        @await Component.InvokeAsync("Posts", Posts)
     </div>
 </div>

@@ -1,22 +1,23 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Twilite.Data;
 using Twilite.Models;
 
 namespace Twilite.Controllers;
 
 public class ActionsController : Controller {
     
-    private readonly ILogger<ActionsController> _logger;
+    private readonly ApplicationDbContext _db;
 
-    public ActionsController(ILogger<ActionsController> logger) {
+    public ActionsController(ApplicationDbContext db) {
         
-        _logger = logger;
+        _db = db;
     }
 
     public IActionResult Explore() {
-
-        return View();
+        ViewData["Posts"] = _db.Posts.ToList();
+        return View(ViewData);
     }
 
     [Authorize]
