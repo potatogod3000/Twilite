@@ -7,32 +7,7 @@
 @if (SignInManager.IsSignedIn(User))
 {   
     
-    <li class="nav-item my-1 p-0">
-        @if (ViewData["Title"] != "Home" && ViewData["Title"] != "Create Post") {
-        <a id="create-post" class="nav-link btn btn-sm btn-primary mx-2 text-white" asp-controller="Post" asp-action="CreatePost" title="Create a New Post">
-            <i class="bi bi-pencil-square m-1"></i></a>
-        }
-    </li>
-
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="User Actions">
-            <img  src="~/Images/user-avatars/user.png" width=34 height=34/>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark text-start">
-            <li>
-                <a id="view-profile" class="dropdown-item" asp-controller="Profile" asp-action="UserProfile" title="View Your Profile">View Profile</a>
-            </li>
-            <li>
-                <a id="view-profile" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage Your Info">Manage Account</a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button id="logout" type="submit" class="ms-2 nav-link btn btn-link text-light border-0">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </li>
+    @await Component.InvokeAsync("UserDropdown")
 
 }
 else

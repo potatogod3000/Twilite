@@ -9,7 +9,7 @@
 
 <h1 class="text-center display-4"><span>@CurrentUserProfile.UserName</span>'s User Profile</h1>
 
-<div class="container-fluid card my-3">
+<div class="container-fluid card mt-3">
     
     <h3 class="mt-2">Posts</h3>
     <hr class="my-0"/>
@@ -26,5 +26,27 @@
         
     </div>
 
+</div>
 
+<div class="container-fluid my-2">
+    <div class="row justify-content-center">
+        <div class="container-fluid card col-md-5 m-2">
+            <h3 class="mt-2">Followers (@CurrentUserProfile.Followers.Count())</h3>
+            <hr class="my-0"/>
+            <ul class="my-2">
+                @foreach(var follower in CurrentUserProfile.Followers) {
+                    <li><a class="link" asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@follower">@follower</a></li>
+                }
+            </ul>
+        </div>
+        <div class="container-fluid card col-md-5 m-2">
+            <h3 class="mt-2">Following (@CurrentUserProfile.Following.Count())</h3>
+            <hr class="my-0"/>
+            <ul class="my-2">
+                @foreach(var following in CurrentUserProfile.Following) {
+                    <li><a class="link" asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@following">@following</a></li>
+                }
+            </ul>
+        </div>
+    </div>
 </div>

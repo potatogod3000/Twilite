@@ -9,9 +9,11 @@ namespace Twilite.Controllers;
 public class HomeController : Controller {
     
     private readonly ApplicationDbContext _db;
+    private ILogger<HomeController> _logger;
 
-    public HomeController(ApplicationDbContext db) {
-        
+    public HomeController(ApplicationDbContext db,
+        ILogger<HomeController> logger) {
+        _logger = logger;
         _db = db;
     }
 
