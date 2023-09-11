@@ -5,10 +5,10 @@ using Twilite.Models;
 
 namespace Twilite.ViewComponents;
 
-public class UserDropdownViewComponent : ViewComponent {
+public class UserDropdown : ViewComponent {
 
     private readonly ApplicationDbContext _db;
-    public UserDropdownViewComponent(ApplicationDbContext db) {
+    public UserDropdown(ApplicationDbContext db) {
         _db = db;
     }
 

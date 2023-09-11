@@ -4,11 +4,11 @@ using Twilite.Models;
 
 namespace Twilite.ViewComponents;
 
-public class UserActionsViewComponent : ViewComponent {
+public class UserActions : ViewComponent {
 
     private readonly ApplicationDbContext _db;
 
-    public UserActionsViewComponent(ApplicationDbContext db) {
+    public UserActions(ApplicationDbContext db) {
         _db = db;
     }
 

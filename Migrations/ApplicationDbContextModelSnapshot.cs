@@ -231,8 +231,8 @@ namespace Twilite.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("PostId"));
 
-                    b.Property<int?>("Likes")
-                        .HasColumnType("integer");
+                    b.Property<List<string>>("Likes")
+                        .HasColumnType("text[]");
 
                     b.Property<string>("PostContent")
                         .IsRequired()
@@ -260,6 +260,9 @@ namespace Twilite.Migrations
                         .HasColumnType("text[]");
 
                     b.Property<List<string>>("Following")
+                        .HasColumnType("text[]");
+
+                    b.Property<List<string>>("Liked")
                         .HasColumnType("text[]");
 
                     b.Property<string>("UserAvatarLocation")

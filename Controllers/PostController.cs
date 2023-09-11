@@ -2,6 +2,9 @@ using Twilite.Models;
 using Twilite.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Encodings.Web;
+using Microsoft.Extensions.WebEncoders.Testing;
+using System.Net;
 
 namespace Twilite.Controllers;
 
@@ -174,4 +177,17 @@ public class PostController : Controller {
         return RedirectToAction("Explore", "Actions");
     }
 
+    /*[HttpPost]
+    public IActionResult LikePost(bool Liked, string PostUserName) {
+        if(Liked) {
+
+        }
+        return StatusCode(StatusCodes.Status200OK);
+    }
+
+    [HttpGet]
+    public IActionResult PostLikes(PostInfoModel CurrentPost) {
+        Console.WriteLine(CurrentPost);
+        return Json(CurrentPost.Likes.Count());
+    } */
 }

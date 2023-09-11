@@ -4,7 +4,7 @@
 }
 
 <h5 class="card-title text-primary">
-    <div class=" card-title float-start">
+    <span class=" card-title float-start">
         <span class="dropdown">
             
             
@@ -53,5 +53,16 @@
             }
             
         </span>
-    </div>
+    </span>
+
+    <span class="float-end mt-1 me-2">
+        @if(CurrentPostModel.UserName != User.Identity.Name@*  && User.Identity.IsAuthenticated *@) {
+            @if(CurrentPostModel.Likes.Contains(User.Identity.Name)) {
+                <i id="like-button" class="bi bi-heart-fill" title="Remove Like"></i>
+            } else {
+                <i id="like-button" class="bi bi-heart" title="Like Post"></i>
+            }
+            <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display" @* onload="var CurrentPost = @Json.Serialize(CurrentPostModel)" *@></span>
+        }
+    </span>
 </h5>
