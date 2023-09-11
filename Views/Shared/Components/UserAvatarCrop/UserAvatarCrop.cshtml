@@ -1,0 +1,10 @@
+@{
+    UserProfileModel CurrentUserProfile = ViewData["CurrentUserProfile"] as UserProfileModel;
+}
+
+<div class="img-container">
+    <img id="image" src="@CurrentUserProfile.UserAvatarLocation">
+</div>
+
+
+<script type="module" src="~/js/UserAvatarCrop.js"></script>

@@ -13,7 +13,10 @@
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             
             <div class="card p-2 mb-3">
-                <label class="form-label">Upload User Avatar</label>
+                <label class="form-label text-center">Upload User Avatar</label>
+                <div class="card-body">
+                    @await Component.InvokeAsync("UserAvatarCrop")
+                </div>
                 <input type="file" asp-for="Input.UserAvatarLocation" class="form-control" placeholder="Please select your avatar image." />
             </div>
             

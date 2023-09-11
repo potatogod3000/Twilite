@@ -17,9 +17,12 @@ public class UserProfileModel {
 
     public List<string>? Following { get; set; }
 
+    public List<string>? Liked { get; set; }
+
     public UserProfileModel() {
         Followers ??= new List<string>();
         Following ??= new List<string>();
+        Liked ??= new List<string>();
         UserAvatarLocation = "~/Images/user-avatars/user.png";
     }
 }

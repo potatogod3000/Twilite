@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Twilite.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/cropperjs/dist/cropper.css" />
+    <link rel="stylesheet" href="~/lib/cropperjs/dist/cropper.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 </head>
 <body>
@@ -56,10 +56,16 @@
             &copy; 2023 - Twilite
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js">
+        // Fallback to loading jQuery from a local path if the CDN is unavailable
+        (window.jQuery || document.write('<script src="~/lib/jquery/dist/jquery.min.js"><\/script>'));
+    </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/cropperjs/dist/cropper.js"></script>
+    <script src="~/lib/cropperjs/dist/cropper.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+    
 </body>
 </html>
