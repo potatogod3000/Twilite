@@ -2,6 +2,10 @@
     IEnumerable<PostInfoModel> PostInfoObj = ViewData["PostInfoObj"] as IEnumerable<PostInfoModel>;
 }
 
+<script>
+    var postIdArr = [];
+</script>
+
 @foreach(var obj in PostInfoObj) {
     
     <div class="card col-md-5 mx-2 my-2">
@@ -14,6 +18,10 @@
 
         </div>
     </div>
+
+    <script>
+        postIdArr.push(@obj.PostId);
+    </script>
 }
 
-<script src="~/js/LikePost.js"></script>
+<script src="~/js/LikePost.js" type="text/javascript"></script>

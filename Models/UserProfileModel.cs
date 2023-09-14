@@ -17,12 +17,13 @@ public class UserProfileModel {
 
     public List<string>? Following { get; set; }
 
-    public List<string>? Liked { get; set; }
+    // Stores all the Posts ("PostId") that the user has liked
+    public List<int>? Liked { get; set; }
 
     public UserProfileModel() {
         Followers ??= new List<string>();
         Following ??= new List<string>();
-        Liked ??= new List<string>();
+        Liked ??= new List<int>();
         UserAvatarLocation = "~/Images/user-avatars/user.png";
     }
 }

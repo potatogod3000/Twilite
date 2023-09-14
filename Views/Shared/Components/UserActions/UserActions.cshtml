@@ -56,13 +56,22 @@
     </span>
 
     <span class="float-end mt-1 me-2">
-        @if(CurrentPostModel.UserName != User.Identity.Name@*  && User.Identity.IsAuthenticated *@) {
+        @if(!User.Identity.IsAuthenticated) {
+            <a asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-heart" title="Login to Like this Post"></i></a>
+            <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
+        } else if(User.Identity.IsAuthenticated && User.Identity.Name != CurrentPostModel.UserName) {
             @if(CurrentPostModel.Likes.Contains(User.Identity.Name)) {
                 <i id="like-button" class="bi bi-heart-fill" title="Remove Like"></i>
+                <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
             } else {
                 <i id="like-button" class="bi bi-heart" title="Like Post"></i>
+                <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
             }
-            <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display" @* onload="var CurrentPost = @Json.Serialize(CurrentPostModel)" *@></span>
+        } else if(User.Identity.Name == CurrentPostModel.UserName) {
+            <i id="like-button" class="bi bi-heart" title="You cannot like your own post"></i>
+            <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
         }
+
+        
     </span>
 </h5>

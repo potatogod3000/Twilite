@@ -28,6 +28,8 @@ public class PostController : Controller {
         else {
             _db.Posts.Update(Post);
             _db.SaveChanges();
+
+            TempData["PostMessage"] = "Your post is now online!";
             return RedirectToAction("Explore", "Actions");        
         }
         
@@ -74,6 +76,8 @@ public class PostController : Controller {
             
             _db.Posts.Update(Post);
             _db.SaveChanges();
+
+            TempData["PostMessage"] = "Post updated";
             return RedirectToAction("Explore", "Actions");
         }   
 
@@ -89,6 +93,8 @@ public class PostController : Controller {
             _db.SaveChanges();
             return RedirectToAction("Explore", "Actions");
         }
+
+        TempData["PostMessage"] = "Post deleted";
         return RedirectToAction("Explore", "Actions");
     }
 
@@ -144,6 +150,7 @@ public class PostController : Controller {
             }
         }
 
+        TempData["FollowMessage"] = $"You followed {PostUserName}";
         return RedirectToAction("Explore", "Actions");
     }
 
@@ -173,21 +180,39 @@ public class PostController : Controller {
                 _db.Update(CurrentUserProfile);
                 _db.SaveChanges();
         }
-        
+
+        TempData["FollowMessage"] = $"You unfollowed {PostUserName}";
         return RedirectToAction("Explore", "Actions");
     }
 
-    /*[HttpPost]
-    public IActionResult LikePost(bool Liked, string PostUserName) {
-        if(Liked) {
-
+    [Authorize]
+    [HttpPost]
+    public IActionResult LikePost(int PostId) {
+        PostInfoModel CurrentPost = _db.Posts.FirstOrDefault(x => x.PostId == PostId);
+        UserProfileModel CurrentUser =_db.UserProfiles.FirstOrDefault(x => x.UserName == User.Identity.Name);
+        
+        if(CurrentPost != null && CurrentUser != null && CurrentPost.UserName != CurrentUser.UserName) {
+            if(!CurrentPost.Likes.Contains(User.Identity.Name) && !CurrentUser.Liked.Contains((int)CurrentPost.PostId)) {
+                CurrentPost.Likes.Add(User.Identity.Name);
+                CurrentUser.Liked.Add(PostId);
+            }
+            else if(CurrentPost.Likes.Contains(User.Identity.Name) && CurrentUser.Liked.Contains((int)CurrentPost.PostId)) {
+                CurrentPost.Likes.Remove(User.Identity.Name);
+                CurrentUser.Liked.Remove(PostId);
+            }
         }
-        return StatusCode(StatusCodes.Status200OK);
-    }
+        else {
+            return StatusCode(StatusCodes.Status400BadRequest);
+        }
 
-    [HttpGet]
-    public IActionResult PostLikes(PostInfoModel CurrentPost) {
-        Console.WriteLine(CurrentPost);
-        return Json(CurrentPost.Likes.Count());
-    } */
+        if(ModelState.IsValid) {
+            _db.Update(CurrentPost);
+            _db.SaveChanges();
+            _db.Update(CurrentUser);
+            _db.SaveChanges();
+            return StatusCode(StatusCodes.Status200OK);
+        }
+
+        return StatusCode(StatusCodes.Status500InternalServerError);
+    }
 }
