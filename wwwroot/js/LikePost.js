@@ -1,44 +1,57 @@
 var likeButtons = document.querySelectorAll("#like-button");
+var likeDisplays = document.querySelectorAll("#like-display");
 
 if(likeButtons != null) {
-    likeButtons.forEach(likeButton => { 
-        likeButton.style.cursor = "Pointer";
-        likeButton.addEventListener("click", function() {
-            LikeButton(likeButton);
-            //document.onload = DisplayPostLikes();
+    for(let i = 0; i < likeButtons.length; i++) {
+        likeButtons[i].style.cursor = "Pointer";
+
+        likeButtons[i].addEventListener("click", function() {
+            var index = i;
+            likeButtonAction(likeButtons[i], likeDisplays[i]);
+            postLikesAction(index);
         });
-    });
+    }
 }
 
-//document.onload = DisplayPostLikes();
+function likeButtonAction(likeButton, likeDisplay) {
+    var liked;
 
-function LikeButton(likeButton) {
+    // Action performed when Liked    
     if(likeButton.classList.contains("bi-heart")) {
         likeButton.classList.toggle("bi-heart");
         likeButton.classList.toggle("bi-heart-fill");
         likeButton.title = "Remove Like";
-        //ToggleLikePost(true);
+        liked = true;
     }
+
+    // Action performed when Removing Like
     else if(likeButton.classList.contains("bi-heart-fill")) {
         likeButton.classList.toggle("bi-heart-fill");
         likeButton.classList.toggle("bi-heart");
         likeButton.title = "Like Post";
-        //ToggleLikePost(false)
+        liked = false;
+    }
+
+    // Toggle the Likes number
+    toggleLikeNumbers(liked, likeDisplay);
+}
+
+function toggleLikeNumbers(liked, likeDisplay) {
+    if(liked) {
+        likeDisplay.innerText++;
+    }
+
+    else if(!liked && likeDisplay.innerText !== 0) {
+        likeDisplay.innerText--;
     }
 }
 
-/* function DisplayPostLikes(CurrentPost) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "Post/PostLikes?CurrentPost="+CurrentPost, true);
-    xhr.send();
-    console.log(xhr.response);
-    const LikeDisplays = document.querySelectorAll("#like-display");
-    LikeDisplays.forEach(LikeDisplay => {
-        console.log(CurrentPost);
-        LikeDisplay.innerHTML = CurrentPost;
-    });
+function postLikesAction(index) {
+    for(let i = 0; i < postIdArr.length; i++) {
+        if(postIdArr[i] === postIdArr[index]) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/Post/LikePost?PostId="+postIdArr[i], true);
+            xhr.send();
+        }
+    }
 }
-
-function ToggleLikePost(Liked) {
-
-} */
