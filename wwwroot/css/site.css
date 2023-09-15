@@ -73,7 +73,7 @@ body {
   border-color: rgb( 3, 169, 244);
 }
 
-#bs-override.btn-primary {
+/* #bs-override.btn-primary {
   border-width: 2px;
   border-style: solid;
   border-color: #0d6efd;
@@ -113,7 +113,7 @@ body {
 
 #bs-override.btn-danger:active {
   opacity: 0.7;
-}
+} */
 
 .link {
   text-decoration: none;
