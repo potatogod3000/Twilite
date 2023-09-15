@@ -208,8 +208,10 @@ public class PostController : Controller {
         if(ModelState.IsValid) {
             _db.Update(CurrentPost);
             _db.SaveChanges();
+
             _db.Update(CurrentUser);
             _db.SaveChanges();
+            
             return StatusCode(StatusCodes.Status200OK);
         }
 

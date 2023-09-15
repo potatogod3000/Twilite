@@ -47,10 +47,10 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <partial name="_Notifications" />
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-white bg-dark">
         <div class="container text-start">
             &copy; 2023 - Twilite
@@ -62,6 +62,7 @@
         (window.jQuery || document.write('<script src="~/lib/jquery/dist/jquery.min.js"><\/script>'));
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Notifications.js"></script>
     <script src="~/lib/cropperjs/dist/cropper.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
