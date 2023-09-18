@@ -1,0 +1,9 @@
+.form-select {
+    width: auto;
+    display: inline-block;
+    font-size: 12px;
+}
+
+#post-area-div a {
+    cursor: pointer;
+}

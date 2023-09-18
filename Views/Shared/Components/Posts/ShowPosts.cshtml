@@ -8,13 +8,13 @@
 
 @foreach(var obj in PostInfoObj) {
     
-    <div class="card col-md-5 mx-2 my-2">
+    <div class="card col-sm-11 mx-2 my-2">
         <div class="card-body">
             
             @await Component.InvokeAsync("UserActions", obj)
             <br/><hr/>
 
-            <p class="card-text">@obj.PostContent</p>
+            <p class="card-text">@Html.Raw(obj.PostContent)</p>
 
         </div>
     </div>

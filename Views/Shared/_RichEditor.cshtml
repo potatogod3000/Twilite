@@ -1,11 +1,115 @@
 @model PostInfoModel
 
-<div class="container">
-    <div class="toolbar">
-        <div class="head">
-            <input asp-for="PostContent" type="text" placeholder="Express your opinions here..."/>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/RichEditor.css" />
+</head>
+
+<div class="my-2" id="create-post">
+    <div class="card">
+        <div class="card-header text-center">
+
+            <span class="me-sm-3">
+                <a class="btn btn-md p-1 mx-0" id="undo" title="Undo">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="redo" title="Redo">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="bold" title="Text Bold">
+                    <i class="bi bi-type-bold"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="italic" title="Text Italic">
+                    <i class="bi bi-type-italic"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="underline" title="Text Underline">
+                    <i class="bi bi-type-underline"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="strikethrough" title="Text Underline">
+                    <i class="bi bi-type-strikethrough"></i>
+                </a>
+                <select class="form-select" id="fs-selector" title="Select Font Size">
+                    <option style="font-size: 13px" value="2">Small</option>
+                    <option style="font-size: 16px" value="3" selected>Regular</option>
+                    <option style="font-size: 18px" value="4">Large</option>
+                    <option style="font-size: 24px" value="5">Extra Large</option>
+                </select>
+            </span>
+
+            <span class="me-sm-3">
+                <a class="btn btn-md p-1 mx-0" id="text-left" title="Text Left">
+                    <i class="bi bi-text-left"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="text-center" title="Text Center">
+                    <i class="bi bi-text-center"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="text-right" title="Text Right">
+                    <i class="bi bi-text-right"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="text-justify" title="Text Justify">
+                    <i class="bi bi-justify"></i>
+                </a>
+            </span>
+
+            <span class="me-sm-3">
+                <a class="btn btn-md p-1 mx-0" id="ul" title="Unordered List">
+                    <i class="bi bi-list-ul"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="ol" title="Ordered List">
+                    <i class="bi bi-list-ol"></i>
+                </a>
+            </span>
+
+            <span class="me-sm-3">
+
+                <span class="dropdown-right">
+                    
+                    <button class="btn btn-md p-1 mx-0" type="button" id="link-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-link-45deg"></i>
+                    </button>
+
+                    <div class="dropdown-menu px-2 w-auto" style="user-select: none;">
+                        <form class="form-control">                        
+                        
+                            <div class="mb-3">
+                                <label for="url" class="form-label">URL</label>
+                                <input class="form-control" id="url" rows="3"></input>
+                            </div>
+                            
+                            <div class="row text-center justify-content-center">
+                                <span class="col-5 my-1 mx-2">
+                                    <a class="btn btn-outline-success w-100" id="add-link"><i class="bi bi-plus-lg"></i></a>
+                                </span>
+                                <span class="col-5 my-1 mx-2">
+                                    <a class="btn btn-outline-warning w-100" id="remove-link"><i class="bi bi-trash"></i><sub></a>
+                                </span>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </span>
+                
+                <a class="btn btn-md p-1 mx-0" id="add-picture" title="Add a Picture">
+                    <i class="bi bi-card-image"></i>
+                </a>
+                <a class="btn btn-md p-1 mx-0" id="add-video" title="Add a Video">
+                    <i class="bi bi-film"></i>
+                </a>
+            </span>
+
         </div>
+
+        <div class="card-body p-0 m-0">
+            <div contenteditable="true" class="p-2" id="post-area-div"></div>
+            <textarea asp-for="PostContent" class="form-control border-0" id="post-area" rows="3" placeholder="Express your opinions here..." hidden></textarea>
+        </div>
+
+        <div class="card-footer" style="font-size: 13px">
+            <span class="float-start">(Max 450 characters)</span>
+            <span class="float-end"><span id="character-counter">0</span> Characters</span>
+        </div>
+
     </div>
 </div>
 
-<script src="RichEditor.cshtml.css"></script>
+<script src="~/js/RichEditor.js"></script>

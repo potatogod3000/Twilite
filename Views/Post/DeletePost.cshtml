@@ -12,14 +12,19 @@
         
         <div class="my-2">
             <h5 class="text-primary">&#x40;@Model.UserName</h5>
-            <textarea asp-for="PostContent" class="form-control" id="create-post-area" rows="3" maxlength="450" disabled></textarea>
+            @* <textarea asp-for="PostContent" class="form-control" id="create-post-area" rows="3" maxlength="450" disabled></textarea> *@
+            <partial name="_RichEditor" />
         </div>
 
         <div class="text-end mb-2">
-            <button id="bs-override" class="btn btn-danger" type="submit" asp-route-UserName="@Model.UserName" asp-route-PostId="@Model.PostId">Delete</button>
+            <button id="delete-button" class="btn btn-danger" type="submit" asp-route-UserName="@Model.UserName" asp-route-PostId="@Model.PostId">Delete</button>
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    postArea.setAttribute("disabled", "true");
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
