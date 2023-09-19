@@ -1,7 +1,7 @@
 <div aria-live="polite" aria-atomic="true" class="position-relative">
     <div class="position-fixed bottom-0 end-0 p-2" style="z-index: 11">
         @if(TempData["PostMessage"] != null) {
-            <div class="toast bg-light" id="toast-area">
+            <div class="toast" id="toast-area">
                 <div class="d-flex">
                     <div class="toast-body">
                         @TempData["PostMessage"]
@@ -12,7 +12,7 @@
         }
 
         @if(TempData["FollowMessage"] != null) {
-            <div class="toast bg-light" id="toast-area">
+            <div class="toast" id="toast-area">
                 <div class="d-flex">
                     <div class="toast-body">
                         @TempData["FollowMessage"]
@@ -23,7 +23,7 @@
         }
 
         @if(TempData["PostLike"] != null) {
-            <div class="toast bg-light" id="toast-area">
+            <div class="toast" id="toast-area">
                 <div class="d-flex">
                     <div class="toast-body">
                         @TempData["PostLike"]

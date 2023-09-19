@@ -12,6 +12,17 @@
                 <a class="btn btn-outline-primary border-0 dropdown-toggle px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     &#x40;@CurrentPostModel.UserName
                 </a>
+
+                <span class="mx-2 text-muted" style="font-size: 13px">
+                    Posted on @CurrentPostModel.PostedDate UTC
+                </span>
+
+                if(@CurrentPostModel.PostEditedDate != null) {
+                    <span class="mx-2 text-muted" style="font-size: 13px">
+                        Last Edited on @CurrentPostModel.PostEditedDate UTC
+                    </span>
+                }
+
                 <ul class="dropdown-menu">
                     @if(User.Identity.Name == @CurrentPostModel.UserName) {
                         <li><a asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-Post="@CurrentPostModel" class="dropdown-item">
@@ -25,7 +36,9 @@
                             <i class="bi bi-trash me-2"></i>Delete
                         </a></li>
 
-                    } else {
+                    }
+                    
+                    else {
 
                         <li><a asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@CurrentPostModel.UserName" class="dropdown-item">
                             <i class="bi bi-person-lines-fill me-2"></i>View Profile
@@ -43,7 +56,9 @@
                         }
                     }
                 </ul>
-            } else {
+            }
+            
+            else {
                 <a class="btn btn-outline-primary border-0 dropdown-toggle px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     &#x40;@CurrentPostModel.UserName
                 </a>
@@ -59,15 +74,19 @@
         @if(!User.Identity.IsAuthenticated) {
             <a asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-heart" title="Login to Like this Post"></i></a>
             <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
-        } else if(User.Identity.IsAuthenticated && User.Identity.Name != CurrentPostModel.UserName) {
-            @if(CurrentPostModel.Likes.Contains(User.Identity.Name)) {
+        }
+        
+        else if(User.Identity.IsAuthenticated && User.Identity.Name != CurrentPostModel.UserName) {
+            if(CurrentPostModel.Likes.Contains(User.Identity.Name)) {
                 <i id="like-button" class="bi bi-heart-fill" title="Remove Like"></i>
                 <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
             } else {
                 <i id="like-button" class="bi bi-heart" title="Like Post"></i>
                 <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
             }
-        } else if(User.Identity.Name == CurrentPostModel.UserName) {
+        }
+        
+        else if(User.Identity.Name == CurrentPostModel.UserName) {
             <i id="like-button" class="bi bi-heart" title="You cannot like your own post"></i>
             <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
         }
