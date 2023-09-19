@@ -2,9 +2,6 @@ using Twilite.Models;
 using Twilite.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Text.Encodings.Web;
-using Microsoft.Extensions.WebEncoders.Testing;
-using System.Net;
 
 namespace Twilite.Controllers;
 
@@ -21,6 +18,7 @@ public class PostController : Controller {
     [HttpPost]
     public IActionResult CreatePost(PostInfoModel Post) {
         Post.UserName = User.Identity.Name;
+        Post.PostedDate = $"{DateTime.UtcNow.ToString("dd/MM/yyyy")} at {DateTime.UtcNow.ToString("HH:mm")}";
 
         if(Post.PostContent == null) {
             ModelState.AddModelError("", "You haven't entered anything in the input area.");
@@ -33,7 +31,7 @@ public class PostController : Controller {
             return RedirectToAction("Explore", "Actions");        
         }
         
-        return RedirectToAction("Index", "Home");
+        return View(Post);
     }
 
 
@@ -65,6 +63,9 @@ public class PostController : Controller {
     public IActionResult EditPost(PostInfoModel Post) {
         int? PostId = Post.PostId;
         PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
+        
+        Post.Likes = PostInfoObj.Likes;
+        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("dd/MM/yyyy")} at {DateTime.UtcNow.ToString("HH:mm")}";
 
         if(PostInfoObj.PostContent == Post.PostContent) {
             ModelState.AddModelError("", "You haven't made any changes to this post.");

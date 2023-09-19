@@ -67,13 +67,13 @@ function actionToPerform(cmd, value = null) {
 
 // Select font size
 function fontSelection() {
-    var selectedValue = fsSelector.value;
+    let selectedValue = fsSelector.value;
     actionToPerform("fontSize", value = selectedValue);
 }
 
 // Add URL
 function addUrl() {
-    var url = prompt("Enter URL");
+    let url = prompt("Enter URL");
 
     while(url == "") {
         url = prompt("Enter URL");
@@ -94,24 +94,9 @@ function videoAction() {
 
 }
 
-
-// Return current page POST button
-const button = function() {
-    if(document.getElementById("post-button") !== undefined) {
-        return document.getElementById("post-button");
-    }
-    else if(document.getElementById("edit-button") !== undefined) {
-        return document.getElementById("edit-button");
-    }
-    else if(document.getElementById("delete-button") !== undefined) {
-        return document.getElementById("delete-button");
-    }
-}
-
 // Count characters entered in Div
 function countCharacters() {
-    //var count = postArea.textLength;
-    var count = postArea.textContent.length;
+    let count = postArea.textContent.length;
     characterCounter.innerText = count;
     
     if(count >= 450) {

@@ -18,6 +18,11 @@ public class PostInfoModel {
     public int? PostId { get; set; }
 
     [Required]
+    public string PostedDate { get; set; }
+
+    public string? PostEditedDate { get; set; }
+
+    [Required]
     public string UserName { get; set; }
 
     [Required]

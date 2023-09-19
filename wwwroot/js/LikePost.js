@@ -1,13 +1,13 @@
-var likeButtons = document.querySelectorAll("#like-button");
-var likeDisplays = document.querySelectorAll("#like-display");
-var liked;
+let likeButtons = document.querySelectorAll("#like-button");
+let likeDisplays = document.querySelectorAll("#like-display");
+let liked;
 
 if(likeButtons != null) {
     for(let i = 0; i < likeButtons.length; i++) {
         likeButtons[i].style.cursor = "Pointer";
 
         likeButtons[i].addEventListener("click", function() {
-            var index = i;
+            let index = i;
             likeButtonAction(likeButtons[i], likeDisplays[i]);
             postLikesAction(index, likeButtons[i], likeDisplays[i]);
         });
@@ -48,7 +48,7 @@ function toggleLikeNumbers(liked, likeDisplay) {
 function postLikesAction(index, likeButton, likeDisplay) {
     for(let i = 0; i < postIdArr.length; i++) {
         if(postIdArr[i] === postIdArr[index]) {
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open("POST", "/Post/LikePost?PostId="+postIdArr[i], true);
             xhr.send();
 

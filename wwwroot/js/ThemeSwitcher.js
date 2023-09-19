@@ -1,7 +1,7 @@
-var rootElement = document.documentElement;
-var themeSwitcher = document.getElementById("theme-switcher-button");
-var lightThemeSelector = document.getElementById("light-theme");
-var darkThemeSelector = document.getElementById("dark-theme");
+let rootElement = document.documentElement;
+let themeSwitcher = document.getElementById("theme-switcher-button");
+let lightThemeSelector = document.getElementById("light-theme");
+let darkThemeSelector = document.getElementById("dark-theme");
 
 document.addEventListener("readystatechange", () => {
     if(localStorage.getItem("theme") == "light" || localStorage.getItem("theme") == undefined || localStorage.getItem("theme") == "") {
