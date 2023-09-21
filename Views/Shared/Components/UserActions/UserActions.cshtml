@@ -3,94 +3,63 @@
     UserProfileModel CurrentUserProfile = ViewData["CurrentUserProfile"] as UserProfileModel;
 }
 
-<h5 class="card-title text-primary">
-    <span class=" card-title float-start">
-        <span class="dropdown">
+<div class="card-title float-start align-middle">
+    
+    @* User Actions dropdown *@
+    <div class="dropdown">
             
-            
-            @if(User.Identity.IsAuthenticated) {
-                <a class="btn btn-outline-primary border-0 dropdown-toggle px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    &#x40;@CurrentPostModel.UserName
-                </a>
+        @* Show these post and user actions if Authenticated *@
+        @if(User.Identity.IsAuthenticated) {
+            <div class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                &#x40;@CurrentPostModel.UserName
+            </div>
 
-                <span class="mx-2 text-muted" style="font-size: 13px">
-                    Posted on @CurrentPostModel.PostedDate UTC
-                </span>
+            <ul class="dropdown-menu">
+                @* If a post belongs to the current user, show these items in dropdown *@
+                @if(User.Identity.Name == @CurrentPostModel.UserName) {
+                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-Post="@CurrentPostModel" class="dropdown-item">
+                        <i class="bi bi-sliders me-2"></i>Manage Profile
+                    </a></li>
+                    <div class="dropdown-divider"></div>
+                    <li><a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@CurrentPostModel.PostId" class="dropdown-item text-primary">
+                        <i class="bi bi-pen me-2"></i>Edit
+                    </a></li>
+                    <li><a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@CurrentPostModel.PostId" class="dropdown-item text-danger">
+                        <i class="bi bi-trash me-2"></i>Delete
+                    </a></li>
 
-                if(@CurrentPostModel.PostEditedDate != null) {
-                    <span class="mx-2 text-muted" style="font-size: 13px">
-                        Last Edited on @CurrentPostModel.PostEditedDate UTC
-                    </span>
                 }
+                
+                @* If a post doesn't belong to the current user, show these items in dropdown *@
+                else {
 
-                <ul class="dropdown-menu">
-                    @if(User.Identity.Name == @CurrentPostModel.UserName) {
-                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-Post="@CurrentPostModel" class="dropdown-item">
-                            <i class="bi bi-sliders me-2"></i>Manage Profile
-                        </a></li>
-                        <div class="dropdown-divider"></div>
-                        <li><a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@CurrentPostModel.PostId" class="dropdown-item text-primary">
-                            <i class="bi bi-pen me-2"></i>Edit
-                        </a></li>
-                        <li><a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@CurrentPostModel.PostId" class="dropdown-item text-danger">
-                            <i class="bi bi-trash me-2"></i>Delete
-                        </a></li>
+                    <li><a asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@CurrentPostModel.UserName" class="dropdown-item">
+                        <i class="bi bi-person-lines-fill me-2"></i>View Profile
+                    </a></li>
 
-                    }
                     
-                    else {
-
-                        <li><a asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@CurrentPostModel.UserName" class="dropdown-item">
-                            <i class="bi bi-person-lines-fill me-2"></i>View Profile
+                    if(CurrentUserProfile.Following.Contains(@CurrentPostModel.UserName)) {
+                        <li><a class="dropdown-item text-danger" asp-controller="Post" asp-action="RemoveFollower" asp-route-PostUserName=@CurrentPostModel.UserName asp-route-CurrentUserName="@User.Identity.Name">
+                            <i class="bi bi-person-dash-fill me-2"></i>Un-Follow
                         </a></li>
-
-                        
-                        if(CurrentUserProfile.Following.Contains(@CurrentPostModel.UserName)) {
-                            <li><a class="dropdown-item text-danger" asp-controller="Post" asp-action="RemoveFollower" asp-route-PostUserName=@CurrentPostModel.UserName asp-route-CurrentUserName="@User.Identity.Name">
-                                <i class="bi bi-person-dash-fill me-2"></i>Un-Follow
-                            </a></li>
-                        } else {
-                            <li><a class="dropdown-item" asp-controller="Post" asp-action="AddFollower" asp-route-PostUserName=@CurrentPostModel.UserName asp-route-CurrentUserName="@User.Identity.Name">
-                                <i class="bi bi-person-plus me-2"></i>Follow
-                            </a></li>
-                        }
+                    } else {
+                        <li><a class="dropdown-item" asp-controller="Post" asp-action="AddFollower" asp-route-PostUserName=@CurrentPostModel.UserName asp-route-CurrentUserName="@User.Identity.Name">
+                            <i class="bi bi-person-plus me-2"></i>Follow
+                        </a></li>
                     }
-                </ul>
-            }
-            
-            else {
-                <a class="btn btn-outline-primary border-0 dropdown-toggle px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    &#x40;@CurrentPostModel.UserName
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item text-primary" title="Login or Register to Interact" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right me-2"></i>Login/Register</a></li>
-                </ul>
-            }
-            
-        </span>
-    </span>
-
-    <span class="float-end mt-1 me-2">
-        @if(!User.Identity.IsAuthenticated) {
-            <a asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-heart" title="Login to Like this Post"></i></a>
-            <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
+                }
+            </ul>
         }
         
-        else if(User.Identity.IsAuthenticated && User.Identity.Name != CurrentPostModel.UserName) {
-            if(CurrentPostModel.Likes.Contains(User.Identity.Name)) {
-                <i id="like-button" class="bi bi-heart-fill" title="Remove Like"></i>
-                <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
-            } else {
-                <i id="like-button" class="bi bi-heart" title="Like Post"></i>
-                <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
-            }
+        @* Show the login dropdown item if not Authenticated  *@
+        else {
+            <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                &#x40;@CurrentPostModel.UserName
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item text-primary" title="Login or Register to Interact" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right me-2"></i>Login/Register</a></li>
+            </ul>
         }
         
-        else if(User.Identity.Name == CurrentPostModel.UserName) {
-            <i id="like-button" class="bi bi-heart" title="You cannot like your own post"></i>
-            <span class="text-end text-primary" style="font-weight: normal; font-size: 16px" id="like-display">@CurrentPostModel.Likes.Count()</span>
-        }
-
-        
-    </span>
-</h5>
+    </div>
+</div>

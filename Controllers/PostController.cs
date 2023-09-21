@@ -18,7 +18,7 @@ public class PostController : Controller {
     [HttpPost]
     public IActionResult CreatePost(PostInfoModel Post) {
         Post.UserName = User.Identity.Name;
-        Post.PostedDate = $"{DateTime.UtcNow.ToString("dd/MM/yyyy")} at {DateTime.UtcNow.ToString("HH:mm")}";
+        Post.PostedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
 
         if(Post.PostContent == null) {
             ModelState.AddModelError("", "You haven't entered anything in the input area.");
@@ -65,7 +65,7 @@ public class PostController : Controller {
         PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
         
         Post.Likes = PostInfoObj.Likes;
-        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("dd/MM/yyyy")} at {DateTime.UtcNow.ToString("HH:mm")}";
+        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
 
         if(PostInfoObj.PostContent == Post.PostContent) {
             ModelState.AddModelError("", "You haven't made any changes to this post.");
@@ -217,5 +217,12 @@ public class PostController : Controller {
         }
 
         return StatusCode(StatusCodes.Status500InternalServerError);
+    }
+
+    [HttpGet]
+    public IActionResult Replies(int PostId) {
+        ViewData["PostInfoObj"] = _db.Posts.FirstOrDefault(x => x.PostId == PostId);
+        ViewData["Replies"] = _db.Posts.FirstOrDefault(x => x.PostId == PostId).Replies;
+        return View(ViewData);
     }
 }
