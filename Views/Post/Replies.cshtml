@@ -1,6 +1,7 @@
 @{
     PostInfoModel PostInfoObj = ViewData["PostInfoObj"] as PostInfoModel;
-    List<PostInfoModel.ReplyInfo> Replies = ViewData["Replies"] as List<PostInfoModel.ReplyInfo>;
+    ViewData["Title"] = $"Replies To {PostInfoObj.UserName}'s Post";
+    //List<PostInfoModel.ReplyInfo> Replies = ViewData["Replies"] as List<PostInfoModel.ReplyInfo>;
 }
 
 @* Show current post *@
@@ -37,7 +38,7 @@
         <div class="row text-center mb-2">
 
             <div class="col-4 dropdown-toggle text-primary">
-                <i class="bi bi-chat-left-text-fill" id="reply-button" title="Replies"></i>
+                <i class="bi bi-chat-left-text-fill" title="Replies"></i>
             </div>
 
             @* Display post likes *@
@@ -75,21 +76,43 @@
 
 </div>
 
-<div class="card my-3 p-2">
-    <textarea @* asp-for="ReplyInfo.ReplyContent" *@ class="form-control border-0" id="post-area" rows="3" placeholder="Express your opinions here..." hidden></textarea>
-    <partial name="_RichEditor" />
+@* Display Replies for the post *@
+<div class="card my-3">
+    <div class="card-header">
+        
+        <div class="display-6 text-center">
+            Replies
+            <button class="btn btn-primary float-end mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#RichEditor" aria-expanded="false" aria-controls="RichEditor">Reply</button>
+        </div>
+    </div>
+
+    @* Collapsing Rich Editor area *@
+    <div class="collapse" id="RichEditor">
+        <partial name="_RichEditor"/>
+        <button type="button" class="btn btn-primary float-end mx-2" id="reply-button">Submit Reply</button>
+    </div>
+
+    <div class="card-body">
+        @if(PostInfoObj.Replies.Count() == 0) {
+            <div class="text-muted text-center my-5">
+                There are no replies to this post yet
+            </div>
+        }
+        else {
+            @foreach(var Reply in PostInfoObj.Replies) {
+                <div class="card">
+                    @Html.Raw(Reply.ReplyContent)
+                </div>
+            }
+        }
+    </div>
 </div>
 
-@* Display Replies for the post *@
-<div class="card my-3 p-2">
-    @if(Replies.Count() == 0) {
-        <div class="text-muted text-center">
-            There are no replies to this post yet
-        </div>
-    }
-    else {
-        @foreach(var Reply in Replies) {
-            
-        }
-    }
-</div>
+<script src="~/js/LikePost.js"></script>
+<script type="text/javascript">
+    let postIdArr = [];
+    postIdArr.push(@PostInfoObj.PostId);
+    let button = document.getElementById("reply-button");
+    button.addEventListener("click", () => ReplyPost(postArea.innerHTML, @PostInfoObj.PostId));
+</script>
+<script src="~/js/Reply.js"></script>

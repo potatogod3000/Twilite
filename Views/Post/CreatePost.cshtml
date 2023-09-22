@@ -10,7 +10,7 @@
     <div class="card border-0">
 
         <div asp-validation-summary="All" class="text-danger"></div>
-        <textarea asp-for="PostContent" class="form-control border-0" id="post-area" rows="3" placeholder="Express your opinions here..." hidden></textarea>
+        <textarea asp-for="PostContent" id="post-area" hidden></textarea>
         <partial name="_RichEditor" />
         
         <div class="text-end mb-2">
