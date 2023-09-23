@@ -1,7 +1,7 @@
 @{
     PostInfoModel PostInfoObj = ViewData["PostInfoObj"] as PostInfoModel;
+    List<ReplyInfoModel> Replies = ViewData["Replies"] as List<ReplyInfoModel>;
     ViewData["Title"] = $"Replies To {PostInfoObj.UserName}'s Post";
-    //List<PostInfoModel.ReplyInfo> Replies = ViewData["Replies"] as List<PostInfoModel.ReplyInfo>;
 }
 
 @* Show current post *@
@@ -92,8 +92,9 @@
         <button type="button" class="btn btn-primary float-end mx-2" id="reply-button">Submit Reply</button>
     </div>
 
+    @* Display Replies *@
     <div class="card-body">
-        @if(PostInfoObj.Replies.Count() == 0) {
+        @if(PostInfoObj.Replies == null || PostInfoObj.Replies.Count() == 0) {
             <div class="text-muted text-center my-5">
                 There are no replies to this post yet
             </div>

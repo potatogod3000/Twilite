@@ -13,7 +13,7 @@ using Twilite.Data;
 namespace Twilite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230920154103_AddReplies")]
+    [Migration("20230923162014_AddReplies")]
     partial class AddReplies
     {
         /// <inheritdoc />
@@ -257,7 +257,7 @@ namespace Twilite.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Twilite.Models.PostInfoModel+ReplyInfo", b =>
+            modelBuilder.Entity("Twilite.Models.ReplyInfoModel", b =>
                 {
                     b.Property<int>("ReplyId")
                         .ValueGeneratedOnAdd()
@@ -265,23 +265,25 @@ namespace Twilite.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReplyId"));
 
-                    b.Property<int?>("PostInfoModelPostId")
+                    b.Property<List<string>>("Likes")
+                        .HasColumnType("text[]");
+
+                    b.Property<int>("PostId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ReplyContent")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ReplyLikes")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ReplyUserName")
+                    b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("ReplyId");
 
-                    b.HasIndex("PostInfoModelPostId");
+                    b.HasIndex("PostId");
 
-                    b.ToTable("ReplyInfo");
+                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("Twilite.Models.UserProfileModel", b =>
@@ -365,11 +367,15 @@ namespace Twilite.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Twilite.Models.PostInfoModel+ReplyInfo", b =>
+            modelBuilder.Entity("Twilite.Models.ReplyInfoModel", b =>
                 {
-                    b.HasOne("Twilite.Models.PostInfoModel", null)
+                    b.HasOne("Twilite.Models.PostInfoModel", "Post")
                         .WithMany("Replies")
-                        .HasForeignKey("PostInfoModelPostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Twilite.Models.PostInfoModel", b =>

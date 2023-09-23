@@ -3,6 +3,7 @@ using Twilite.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace Twilite.Controllers;
 
@@ -223,8 +224,7 @@ public class PostController : Controller {
     [Authorize]
     [HttpGet]
     public IActionResult Replies(int PostId) {
-        ViewData["PostInfoObj"] = _db.Posts.FirstOrDefault(x => x.PostId == PostId);
-        ViewData["Replies"] = _db.Posts.FirstOrDefault(x => x.PostId == PostId).Replies;
+        ViewData["PostInfoObj"] = _db.Posts.Include(x => x.Replies).FirstOrDefault(x => x.PostId == PostId);
 
         return View(ViewData);
     }
@@ -233,17 +233,19 @@ public class PostController : Controller {
     [HttpPost]
     public IActionResult Replies(string ReplyString, int PostId) {
         PostInfoModel Post = _db.Posts.FirstOrDefault(p => p.PostId == PostId);
-        PostInfoModel.ReplyInfo Reply = new() {
+
+        ReplyInfoModel Reply = new() {
+            UserName = User.Identity.Name,
             ReplyContent = ReplyString,
-            ReplyUserName = User.Identity.Name
+            Post = Post
         };
-        
+
+
         if(Post == null || Reply.ReplyContent == null || Reply.ReplyContent == "") {
             return StatusCode(StatusCodes.Status400BadRequest);
         }
         else if(Post != null && Reply.ReplyContent != null && Reply.ReplyContent != "") {
-            Post.Replies.Add(Reply);
-            _db.Posts.Update(Post);
+            _db.Replies.Add(Reply);
             _db.SaveChanges();
             return StatusCode(StatusCodes.Status200OK);
         }
