@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Twilite.Models;
 using Twilite.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Twilite.Controllers;
 
@@ -18,7 +19,7 @@ public class HomeController : Controller {
     }
 
     public IActionResult Index() {
-        ViewData["Posts"] = _db.Posts.ToList();
+        ViewData["Posts"] = _db.Posts.Include(x => x.Replies).ToList();
         return View(ViewData);
     }
 

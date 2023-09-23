@@ -40,33 +40,32 @@
             <div class="row text-center mb-2">
 
                 <div class="col-4">
-                    <a asp-controller="Post" asp-action="Replies" asp-route-PostId="@obj.PostId">
-                        <i class="bi bi-chat-left-text" id="reply-button" title="Replies"></i>
-                    </a>
+                    <a asp-controller="Post" asp-action="Replies" asp-route-PostId="@obj.PostId"><i class="bi bi-chat-left-text" id="reply-button" title="Replies"></i></a>
+                    <span class="text-end" style="font-weight: normal; font-size: 13px">@obj.Replies.Count()</span>
                 </div>
 
                 @* Display post likes *@
                 <div class="col-4">
                     @if(!User.Identity.IsAuthenticated) {
-                        <a asp-area="Identity" asp-page="/Account/Login">
+                        <a asp-area="Identity" asp-page="/Account/Login" style="text-decoration: none">
                             <i class="bi bi-heart" title="Login to Like this Post"></i>
                         </a>
-                        <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@obj.Likes.Count()</span>
+                        <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
                     }
                     
                     else if(User.Identity.IsAuthenticated && User.Identity.Name != obj.UserName) {
                         if(obj.Likes.Contains(User.Identity.Name)) {
                             <i id="like-button" class="bi bi-heart-fill text-primary" title="Remove Like"></i>
-                            <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@obj.Likes.Count()</span>
+                            <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
                         } else {
                             <i id="like-button" class="bi bi-heart text-primary" title="Like Post"></i>
-                            <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@obj.Likes.Count()</span>
+                            <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
                         }
                     }
                     
                     else if(User.Identity.Name == obj.UserName) {
                         <i id="like-button" class="bi bi-heart text-primary" title="You cannot like your own post"></i>
-                        <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@obj.Likes.Count()</span>
+                        <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
                     }
                 </div>
 

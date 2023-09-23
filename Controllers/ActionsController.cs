@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Twilite.Data;
 using Twilite.Models;
 
@@ -18,7 +19,7 @@ public class ActionsController : Controller {
     }
 
     public IActionResult Explore() {
-        ViewData["Posts"] = _db.Posts.ToList();
+        ViewData["Posts"] = _db.Posts.Include(x => x.Replies).ToList();
         return View(ViewData);
     }
 
