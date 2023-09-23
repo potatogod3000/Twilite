@@ -1,0 +1,120 @@
+@{
+    PostInfoModel PostInfoObj = ViewData["PostInfoObj"] as PostInfoModel;
+    List<ReplyInfoModel> Replies = ViewData["Replies"] as List<ReplyInfoModel>;
+    ViewData["Title"] = $"Replies To {PostInfoObj.UserName}'s Post";
+}
+
+@* Show current post *@
+<div class="card mt-2">
+    <div class="card-body pb-2">
+        
+        @* Display user actions i.e., dropdown of actions for current post and user *@
+        <div class="row">
+            <div class="col-12">
+                @await Component.InvokeAsync("UserActions", PostInfoObj)
+            </div>
+
+            <div class="col-12">
+                @* Show posted and edited date. *@
+                <span class="text-muted" style="font-size: 13px">
+                    Posted: @PostInfoObj.PostedDate
+                </span>
+
+                @if(PostInfoObj.PostEditedDate != null) {
+                    <i class="bi bi-dot text-muted"></i>
+                    <span class="text-muted" style="font-size: 13px">
+                        Edited: @PostInfoObj.PostEditedDate
+                    </span>
+                }
+            </div>
+        </div>
+
+        @* Render the body of post after converting HTML content to plain text *@
+        <div class="card my-2 p-2 border-top border-bottom border-0">
+            <p class="card-text">@Html.Raw(PostInfoObj.PostContent)</p>
+        </div>
+
+        @* Post action buttons i.e., Like, Reply and Share *@
+        <div class="row text-center mb-2">
+
+            <div class="col-4 dropdown-toggle text-primary">
+                <i class="bi bi-chat-left-text-fill" title="Replies"></i>
+                <span>@PostInfoObj.Replies.Count()</span>
+            </div>
+
+            @* Display post likes *@
+            <div class="col-4">
+                @if(!User.Identity.IsAuthenticated) {
+                    <a asp-area="Identity" asp-page="/Account/Login">
+                        <i class="bi bi-heart" title="Login to Like this Post"></i>
+                    </a>
+                    <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@PostInfoObj.Likes.Count()</span>
+                }
+                
+                else if(User.Identity.IsAuthenticated && User.Identity.Name != PostInfoObj.UserName) {
+                    if(PostInfoObj.Likes.Contains(User.Identity.Name)) {
+                        <i id="like-button" class="bi bi-heart-fill text-primary" title="Remove Like"></i>
+                        <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@PostInfoObj.Likes.Count()</span>
+                    } else {
+                        <i id="like-button" class="bi bi-heart text-primary" title="Like Post"></i>
+                        <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@PostInfoObj.Likes.Count()</span>
+                    }
+                }
+                
+                else if(User.Identity.Name == PostInfoObj.UserName) {
+                    <i id="like-button" class="bi bi-heart text-primary" title="You cannot like your own post"></i>
+                    <span class="text-end" style="font-weight: normal; font-size: 16px" id="like-display">@PostInfoObj.Likes.Count()</span>
+                }
+            </div>
+
+            <div class="col-4">
+                <i class="bi bi-share text-primary" id="share-button" title="Share the Post"></i>
+            </div>
+        
+        </div>
+
+    </div>
+
+</div>
+
+@* Display Replies for the post *@
+<div class="card my-3">
+    <div class="card-header">
+        
+        <div class="display-6 text-center">
+            Replies
+            <button class="btn btn-primary float-end mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#RichEditor" aria-expanded="false" aria-controls="RichEditor">Reply</button>
+        </div>
+    </div>
+
+    @* Collapsing Rich Editor area *@
+    <div class="collapse" id="RichEditor">
+        <partial name="_RichEditor"/>
+        <button type="button" class="btn btn-primary float-end mx-2" id="reply-button">Submit Reply</button>
+    </div>
+
+    @* Display Replies *@
+    <div class="card-body">
+        @if(PostInfoObj.Replies == null || PostInfoObj.Replies.Count() == 0) {
+            <div class="text-muted text-center my-5">
+                There are no replies to this post yet
+            </div>
+        }
+        else {
+            @foreach(var Reply in PostInfoObj.Replies) {
+                <div class="card">
+                    @Html.Raw(Reply.ReplyContent)
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script src="~/js/LikePost.js"></script>
+<script type="text/javascript">
+    let postIdArr = [];
+    postIdArr.push(@PostInfoObj.PostId);
+    let button = document.getElementById("reply-button");
+    button.addEventListener("click", () => ReplyPost(postArea.innerHTML, @PostInfoObj.PostId));
+</script>
+<script src="~/js/Reply.js"></script>

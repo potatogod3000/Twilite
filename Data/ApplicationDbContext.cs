@@ -11,6 +11,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     public DbSet<PostInfoModel> Posts {get; set; }
 
+    public DbSet<ReplyInfoModel> Replies { get; set; }
+
     public DbSet<UserProfileModel> UserProfiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
@@ -19,5 +21,6 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
         //Generate SERIAL Column in PostgreSQL Db Table (which auto-increments)
         builder.Entity<PostInfoModel>().Property(p => p.PostId).ValueGeneratedOnAdd();
+        builder.Entity<ReplyInfoModel>().Property(r => r.ReplyId).ValueGeneratedOnAdd();
     }
 }

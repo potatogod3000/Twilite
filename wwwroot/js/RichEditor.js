@@ -26,8 +26,6 @@ const hiddenPostArea = document.getElementById("post-area");
 const characterCounter = document.getElementById("character-counter");
 
 // Event Listeners
-document.addEventListener("DOMContentLoaded", onGet);
-
 undo.addEventListener("click", () => actionToPerform("undo"));
 redo.addEventListener("click", () => actionToPerform("redo"));
 bold.addEventListener("click", () => actionToPerform("bold"));
@@ -103,28 +101,23 @@ function countCharacters() {
         characterCounter.style.color = "red";
         characterCounter.append(" (Limit Reached)");
         if(count > 450) {
-            button().setAttribute("disabled", "true");
+            button.setAttribute("disabled", "true");
         } else {
-            button().removeAttribute("disabled");
+            button.removeAttribute("disabled");
         }
     }
     else if(count >= 430) {
         characterCounter.style.color = "";
-        button().removeAttribute("disabled");
+        button.removeAttribute("disabled");
     }
     else if(count >= 350 ) {
         characterCounter.style.color = "";
-        button().removeAttribute("disabled");
+        button.removeAttribute("disabled");
     }
     else {
         characterCounter.style.color = "";
-        button().removeAttribute("disabled");
+        button.removeAttribute("disabled");
     }
-}
-
-// Assign hidden post area's value to post area on page load
-function onGet() {
-    postArea.innerHTML = hiddenPostArea.innerText;
 }
 
 // Assign post area content to hidden post area to be sent to the server side

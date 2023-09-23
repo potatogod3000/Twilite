@@ -2,6 +2,8 @@ using Twilite.Models;
 using Twilite.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace Twilite.Controllers;
 
@@ -18,7 +20,7 @@ public class PostController : Controller {
     [HttpPost]
     public IActionResult CreatePost(PostInfoModel Post) {
         Post.UserName = User.Identity.Name;
-        Post.PostedDate = $"{DateTime.UtcNow.ToString("dd/MM/yyyy")} at {DateTime.UtcNow.ToString("HH:mm")}";
+        Post.PostedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
 
         if(Post.PostContent == null) {
             ModelState.AddModelError("", "You haven't entered anything in the input area.");
@@ -65,7 +67,7 @@ public class PostController : Controller {
         PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
         
         Post.Likes = PostInfoObj.Likes;
-        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("dd/MM/yyyy")} at {DateTime.UtcNow.ToString("HH:mm")}";
+        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
 
         if(PostInfoObj.PostContent == Post.PostContent) {
             ModelState.AddModelError("", "You haven't made any changes to this post.");
@@ -217,5 +219,38 @@ public class PostController : Controller {
         }
 
         return StatusCode(StatusCodes.Status500InternalServerError);
+    }
+
+    [Authorize]
+    [HttpGet]
+    public IActionResult Replies(int PostId) {
+        ViewData["PostInfoObj"] = _db.Posts.Include(x => x.Replies).FirstOrDefault(x => x.PostId == PostId);
+
+        return View(ViewData);
+    }
+
+    [Authorize]
+    [HttpPost]
+    public IActionResult Replies(string ReplyString, int PostId) {
+        PostInfoModel Post = _db.Posts.FirstOrDefault(p => p.PostId == PostId);
+
+        ReplyInfoModel Reply = new() {
+            UserName = User.Identity.Name,
+            ReplyContent = ReplyString,
+            Post = Post
+        };
+
+
+        if(Post == null || Reply.ReplyContent == null || Reply.ReplyContent == "") {
+            return StatusCode(StatusCodes.Status400BadRequest);
+        }
+        else if(Post != null && Reply.ReplyContent != null && Reply.ReplyContent != "") {
+            _db.Replies.Add(Reply);
+            _db.SaveChanges();
+            return StatusCode(StatusCodes.Status200OK);
+        }
+        else {
+           return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 }
