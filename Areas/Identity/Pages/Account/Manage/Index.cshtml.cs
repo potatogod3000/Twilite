@@ -3,12 +3,14 @@
 #nullable disable
 
 using System;
+using System.IO;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Twilite.Data;
 
 namespace Twilite.Areas.Identity.Pages.Account.Manage
@@ -62,6 +64,31 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
             };
         }
 
+        private async Task SetProfilePicture(IFormFile picFile) {
+            var fileExtension = Path.GetExtension(picFile.FileName);
+
+            if(fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg") {
+                ModelState.AddModelError(string.Empty, "Invalid file detected. Only *.jpg, *.jpeg ,*.png files are accepted.");
+                return;
+            }
+
+            var fileName = $"{Guid.NewGuid()}_{User.Identity.Name}";
+            var dirPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/user-avatars/");
+            var filePath = Path.Combine(dirPath, fileName);
+
+            try {
+                if(!Directory.Exists(dirPath)) {
+                    Directory.CreateDirectory(dirPath);
+                }
+
+                using var fileStream = new FileStream(filePath, FileMode.Create);
+                await picFile.CopyToAsync(fileStream);
+            }
+            catch(Exception exception) {
+                ModelState.AddModelError(string.Empty, exception.Message);
+            }
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -74,7 +101,7 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync([FromForm]IFormFile profilePicture)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -82,8 +109,12 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if(Input.PhoneNumber == null && Input.UserAvatarLocation == null) {
+            if(Input.PhoneNumber == null && profilePicture == null) {
                 ModelState.AddModelError(string.Empty, "You have not modified anything.");
+            }
+
+            if(profilePicture != null) {
+                await SetProfilePicture(profilePicture);
             }
 
             if (!ModelState.IsValid)

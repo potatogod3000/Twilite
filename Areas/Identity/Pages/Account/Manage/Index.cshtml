@@ -9,7 +9,7 @@
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
-        <form id="profile-form" method="post">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             
             <div class="card p-2 mb-3">
@@ -17,7 +17,8 @@
                 <div class="card-body">
                     @await Component.InvokeAsync("UserAvatarCrop")
                 </div>
-                <input type="file" asp-for="Input.UserAvatarLocation" class="form-control" placeholder="Please select your avatar image." />
+                <input type="file" id="upload-area" class="form-control" accept=".png,.jpg,.jpeg" name="profilePicture" placeholder="Please select your avatar image." />
+                <span id="error-area" class="mt-2 mx-1 text-danger"></span>
             </div>
             
             <div class="form-floating mb-3">
@@ -31,10 +32,13 @@
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <button id="save-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
 </div>
+
+<script src="~/lib/cropperjs/dist/cropper.min.js"></script>
+<script src="~/js/ManageUserProfile.js"></script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

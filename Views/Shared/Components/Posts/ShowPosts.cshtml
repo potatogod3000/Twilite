@@ -8,7 +8,7 @@
 
 @foreach(var obj in PostInfoObj) {
     <div class="card col-sm-11 mx-2 my-1">
-        <div class="card-body pb-2">
+        <div class="card-body">
             
             @* Display user actions i.e., dropdown of actions for current post and user *@
             <div class="row">
@@ -32,12 +32,12 @@
             </div>
 
             @* Render the body of post after converting HTML content to plain text *@
-            <div class="card my-2 p-2 border-top border-bottom border-0">
-                <p class="card-text">@Html.Raw(obj.PostContent)</p>
+            <div class="my-2 px-2 pt-2 pb-0 border-top">
+                <p>@Html.Raw(obj.PostContent)</p>
             </div>
 
             @* Post action buttons i.e., Like, Reply and Share *@
-            <div class="row text-center mb-2">
+            <div class="row text-center pb-0">
 
                 <div class="col-4">
                     <a asp-controller="Post" asp-action="Replies" asp-route-PostId="@obj.PostId"><i class="bi bi-chat-left-text" id="reply-button" title="Replies"></i></a>
