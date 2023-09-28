@@ -2,6 +2,4 @@
     UserProfileModel CurrentUserProfile = ViewData["CurrentUserProfile"] as UserProfileModel;
 }
 
-<div class="img-container">
-    <img id="image-preview" src="@CurrentUserProfile.UserAvatarLocation" />
-</div>
+<img id="image-preview" class="ratio ratio-1x1" src="@CurrentUserProfile.UserAvatarLocation" />

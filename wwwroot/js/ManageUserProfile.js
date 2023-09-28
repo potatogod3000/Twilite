@@ -2,17 +2,19 @@ const uploadArea = document.getElementById("upload-area");
 const errorArea = document.getElementById("error-area");
 const saveButton = document.getElementById("save-button");
 const imagePreview = document.getElementById("image-preview");
-let cropper;
 
-// Create and load cropper div
-document.addEventListener("DOMContentLoaded", loadCropper);
-function loadCropper() {
-    cropper = new Cropper(imagePreview, {
-        aspectRatio: 1,
-        zoomOnWheel: false,
-        viewMode: 2,
-    });
-}
+// Create cropper div
+const cropper = new Cropper(imagePreview, {
+    aspectRatio: 1/1,
+    viewMode: 2,
+    zoomOnWheel: false,
+    restore: false,
+    movable: false,
+    zoomable: false,
+    rotatable: false,
+    scalable: false,
+    background: false
+});
 
 // Validate file to be only of png, jpg or jpeg format
 uploadArea.addEventListener("change", () => {
@@ -23,12 +25,12 @@ uploadArea.addEventListener("change", () => {
     }
     else {
         errorArea.textContent = "";
-        getImageData();
+        getImageData(cropper);
         saveButton.removeAttribute("disabled");
     }
 });
 
-function getImageData() {
+function getImageData(cropper) {
     const files = uploadArea.files;
     const imageFilesLength = files.length;
 
@@ -36,9 +38,6 @@ function getImageData() {
         const imageSrc = URL.createObjectURL(files[0]);
         imagePreview.removeAttribute("src");
         
-        cropper.destroy();
-        imagePreview.src = imageSrc;
-        imagePreview.style.display = "block";
-        loadCropper();
+        cropper.replace(imageSrc);
     }
 }
