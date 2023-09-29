@@ -11,7 +11,7 @@ public class UserAvatarCrop : ViewComponent {
     }
 
     public IViewComponentResult Invoke() {
-        ViewData["CurrentUserProfile"] = _db.UserProfiles.FirstOrDefault(x => x.UserName == User.Identity.Name);
+        ViewData["CurrentUserProfilePicture"] = _db.UserProfiles.FirstOrDefault(x => x.UserName == User.Identity.Name).ProfilePictureBytes;
 
         return View("UserAvatarCrop", ViewData);
     }

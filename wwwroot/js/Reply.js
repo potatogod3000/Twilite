@@ -6,7 +6,7 @@ function ReplyPost(replyString, postId) {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     
     xhr.onload = function() {
-        if(this.status ==200) {
+        if(this.status == 200) {
             console.log(this.responseText);
         }
     }
