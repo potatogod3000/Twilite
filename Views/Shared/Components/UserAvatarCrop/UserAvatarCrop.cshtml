@@ -1,5 +1,7 @@
 @{
-    UserProfileModel CurrentUserProfile = ViewData["CurrentUserProfile"] as UserProfileModel;
+    var ProfilePictureBytes = ViewData["CurrentUserProfilePicture"] as byte[];
+    var ProfilePictureBase64 = "data:image/png;base64," + Convert.ToBase64String(ProfilePictureBytes);
+    
 }
 
-<img id="image-preview" class="ratio ratio-1x1" src="@CurrentUserProfile.UserAvatarLocation" />
+<img id="image-preview" class="ratio ratio-1x1" src="@ProfilePictureBase64" />

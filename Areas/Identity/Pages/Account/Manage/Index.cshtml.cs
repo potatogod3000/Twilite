@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Twilite.Data;
+using System.Drawing;
+using System.Text.RegularExpressions;
+using Twilite.Models;
 
 namespace Twilite.Areas.Identity.Pages.Account.Manage
 {
@@ -46,43 +49,39 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
 
             [Display(Name = "Upload User Avatar")]
-            public string UserAvatarLocation { get; set; }
+            public byte[] UserAvatar { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var userAvatarLocation = _db.UserProfiles.FirstOrDefault(x => x.UserName == userName).UserAvatarLocation;
+            var ProfilePictureBytes = _db.UserProfiles.FirstOrDefault(x => x.UserName == userName).ProfilePictureBytes;
 
             Username = userName;
 
             Input = new InputModel
             {
-                UserAvatarLocation = userAvatarLocation,
+                UserAvatar = ProfilePictureBytes,
                 PhoneNumber = phoneNumber
             };
         }
 
-        private async Task SetProfilePicture(IFormFile picFile) {
-            var fileExtension = Path.GetExtension(picFile.FileName);
-
-            if(fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg") {
-                ModelState.AddModelError(string.Empty, "Invalid file detected. Only *.jpg, *.jpeg ,*.png files are accepted.");
-                return;
-            }
-
-            var fileName = $"{Guid.NewGuid()}_{User.Identity.Name}";
-            var dirPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/user-avatars/");
-            var filePath = Path.Combine(dirPath, fileName);
-
+        private void SetProfilePicture(string profilePictureBase64) {
+            UserProfileModel userProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == User.Identity.Name);
             try {
-                if(!Directory.Exists(dirPath)) {
-                    Directory.CreateDirectory(dirPath);
-                }
+                // Remove unwanted padding text in-front of the base64 string
+                Regex regex = new(@"^[\w/\:.-]+;base64,");
+                profilePictureBase64 = regex.Replace(profilePictureBase64, string.Empty);
 
-                using var fileStream = new FileStream(filePath, FileMode.Create);
-                await picFile.CopyToAsync(fileStream);
+                byte[] bytes = Convert.FromBase64String(profilePictureBase64);
+
+                userProfile.ProfilePictureBytes = bytes;
+                
+                if(ModelState.IsValid) {
+                    _db.Update(userProfile);
+                    _db.SaveChanges();
+                }
             }
             catch(Exception exception) {
                 ModelState.AddModelError(string.Empty, exception.Message);
@@ -101,7 +100,7 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync([FromForm]IFormFile profilePicture)
+        public async Task<IActionResult> OnPostAsync(string profilePictureBase64)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -109,12 +108,12 @@ namespace Twilite.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if(Input.PhoneNumber == null && profilePicture == null) {
+            if(Input.PhoneNumber == null && profilePictureBase64 == null) {
                 ModelState.AddModelError(string.Empty, "You have not modified anything.");
             }
 
-            if(profilePicture != null) {
-                await SetProfilePicture(profilePicture);
+            if(profilePictureBase64 != null) {
+                SetProfilePicture(profilePictureBase64);
             }
 
             if (!ModelState.IsValid)

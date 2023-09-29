@@ -1,5 +1,9 @@
 @model UserProfileModel
 
+@{
+    var ProfilePictureBase64 = "data:image/png;base64," + Convert.ToBase64String(Model.ProfilePictureBytes);
+}
+
 <li class="nav-item my-1 p-0">
 @if (ViewData["Title"] != "Home" && ViewData["Title"] != "Create Post") {
     <a id="create-post" class="btn btn-sm btn-outline-primary mt-1 mx-2" asp-controller="Post" asp-action="CreatePost" title="Create a New Post">
@@ -10,7 +14,7 @@
 
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="User Actions">
-        <img  src="@Model.UserAvatarLocation" width=34 height=34/>
+        <img  src="@ProfilePictureBase64" width=34 height=34/>
     </a>
     <ul class="dropdown-menu dropdown-menu-end text-start">
         <li>
