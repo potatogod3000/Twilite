@@ -4,6 +4,9 @@ const saveButton = document.getElementById("save-button");
 const imagePreview = document.getElementById("image-preview");
 const hiddenCroppedImage = document.getElementById("base64-image-area");
 
+// Listen to Save button click and perform sendCroppedData
+saveButton.addEventListener("click", sendCroppedData);
+
 // Create cropper
 const cropper = new Cropper(imagePreview, {
     aspectRatio: 1/1,
@@ -31,8 +34,6 @@ uploadArea.addEventListener("change", () => {
     }
 });
 
-saveButton.addEventListener("click", sendCroppedData);
-
 // Replace with new image when a new image file is selected
 function getImageData(cropper) {
     const files = uploadArea.files;
@@ -46,23 +47,11 @@ function getImageData(cropper) {
     }
 }
 
-// Send cropped data to backend on Save Button click
+// Copy cropped data as base64 string to hidden input
 function sendCroppedData() {
     const croppedArea = cropper.getCroppedCanvas();
     const roundedCroppedData = getRoundedCanvas(croppedArea).toDataURL("image/png");
     hiddenCroppedImage.value = roundedCroppedData;
-
-    /* const formData = new FormData();
-    formData.append("profilePicture", roundedCroppedArea);
-    const token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
-
-    fetch('/Identity/Account/Manage', {
-        formData,
-        headers: {
-            "RequestVerificationToken": token,
-            "Content-Type": "multipart/form-data"
-        }
-    }); */
 }
 
 // Get rounded canvas for the given rectangular/square one

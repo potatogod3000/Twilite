@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Twilite.Controllers;
 
@@ -232,7 +233,7 @@ public class PostController : Controller {
     [Authorize]
     [HttpPost]
     public IActionResult Replies(string ReplyString, int PostId) {
-        PostInfoModel Post = _db.Posts.FirstOrDefault(p => p.PostId == PostId);
+        PostInfoModel Post = _db.Posts.Include(r => r.Replies).FirstOrDefault(p => p.PostId == PostId);
 
         ReplyInfoModel Reply = new() {
             UserName = User.Identity.Name,
@@ -241,12 +242,13 @@ public class PostController : Controller {
         };
 
 
-        if(Post == null || Reply.ReplyContent == null || Reply.ReplyContent == "") {
+        if(Reply.ReplyContent == null || Reply.ReplyContent == "") {
             return StatusCode(StatusCodes.Status400BadRequest);
         }
         else if(Post != null && Reply.ReplyContent != null && Reply.ReplyContent != "") {
             _db.Replies.Add(Reply);
             _db.SaveChanges();
+
             return StatusCode(StatusCodes.Status200OK);
         }
         else {
