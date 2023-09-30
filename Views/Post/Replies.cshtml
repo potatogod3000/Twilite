@@ -1,6 +1,6 @@
 @{
     PostInfoModel PostInfoObj = ViewData["PostInfoObj"] as PostInfoModel;
-    ViewData["Title"] = $"Replies To {PostInfoObj.UserName}'s Post";
+    ViewData["Title"] = $"{PostInfoObj.UserName}'s Post";
 }
 
 @* Show current post *@
@@ -87,10 +87,11 @@
     </div>
 
     @* Collapsing Rich Editor area *@
-    <div class="collapse p-2" id="RichEditor">
-        <div class="card p-2">
-            <partial class="pb-2" name="_RichEditor"/>
-            <button type="button" class="btn btn-primary mx-2" id="reply-button">Submit Reply</button>
+    <div id="alert-placeholder"></div>
+    <div class="mx-2 collapse p-2" id="RichEditor">
+        <partial class="pb-2" name="_RichEditor"/>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" id="reply-button">Submit Reply</button>
         </div>
     </div>
 
