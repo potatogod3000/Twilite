@@ -77,6 +77,12 @@
 </div>
 
 @* Display Replies for the post *@
+
+<script>
+    const postId = @PostInfoObj.PostId;
+    const replyIds = [];
+</script>
+
 <div class="card my-3">
     <div class="card-header">
         
@@ -110,7 +116,18 @@
                         &#x40;@Reply.UserName
                         
                         <span class="float-end pe-2">
-                            <i class="bi bi-heart me-2" title="Like"></i>
+                            @if(!Reply.Likes.Contains(User.Identity.Name)) {
+                                <i class="bi bi-heart me-1" id="reply-like-button" title="Like Reply"></i>
+                            }
+                            else {
+                                <i class="bi bi-heart-fill me-2" id="reply-like-button" title="Remove Like"></i>
+                            }
+                            <span id="reply-likes-count" class="me-3">@Reply.Likes.Count()</span>
+
+                            <script>
+                                replyIds.push(@Reply.ReplyId);
+                            </script>
+
                             <i class="bi bi-share text-primary me-2" id="share-button" title="Share the Post"></i>
                         </span>
                     </div>

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Net;
 
 namespace Twilite.Controllers;
 
@@ -253,6 +254,35 @@ public class PostController : Controller {
         }
         else {
            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [Authorize]
+    public IActionResult ReplyLikes(int PostId, int ReplyId) {
+        ReplyInfoModel Reply = _db.Posts.Include(r => r.Replies)
+                                        .FirstOrDefault(x => x.PostId == PostId).Replies
+                                        .FirstOrDefault(x => x.ReplyId == ReplyId);
+
+        if(Reply == null) {
+            return StatusCode(StatusCodes.Status400BadRequest);
+        }
+        else if(Reply.UserName != User.Identity.Name) {
+            if(Reply.Likes.Contains(User.Identity.Name)) {
+                Reply.Likes.Remove(User.Identity.Name);
+            }
+            else {
+                Reply.Likes.Add(User.Identity.Name);
+            }
+
+            _db.Replies.Update(Reply);
+            _db.SaveChanges();
+            return StatusCode(StatusCodes.Status200OK); 
+        }
+        else if(Reply.UserName == User.Identity.Name) {
+            return StatusCode(StatusCodes.Status406NotAcceptable);
+        }
+        else {
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }
