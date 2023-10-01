@@ -4,6 +4,17 @@
     font-size: 12px;
 }
 
+#post-area-div{
+    outline: 0px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 1px;
+    transition: border 200ms;
+}
+
+#post-area-div:focus {
+    border: 1px solid var(--bs-primary);
+}
+
 #post-area-div a {
     cursor: pointer;
 }
