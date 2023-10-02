@@ -1,12 +1,14 @@
 const alertPlaceholder = document.getElementById('alert-placeholder');
 const replyLikeButtons = document.querySelectorAll("#reply-like-button");
 const replyLikesCounts = document.querySelectorAll("#reply-likes-count");
+const loadAllReplies = document.getElementById("load-all-replies");
 
 for(let i = 0; i < replyLikeButtons.length; i++) {
     replyLikeButtons[i].style.cursor = "pointer";
     replyLikeButtons[i].addEventListener("click", () => likeReply(i, replyLikeButtons[i], replyLikesCounts[i]));
 }
 
+// Reply function
 function ReplyPost(replyString, postId) {
     const params = "ReplyString="+replyString+"&PostId="+postId;
 
@@ -63,7 +65,7 @@ function appendAlert(message, type) {
 
 // Reply Likes
 function likeReply(index, replyLikeButton, replyLikesCount) {
-    params = "PostId=" + postId + "&ReplyId=" + replyIds[index];
+    params = "PostId=" + postId[index] + "&ReplyId=" + replyIds[index];
 
     // Reply likes manipulation
     fetch("/Post/ReplyLikes", {
@@ -79,22 +81,23 @@ function likeReply(index, replyLikeButton, replyLikesCount) {
         if(response.status === 200) {
             replyLikeButton.classList.toggle("bi-heart-fill");
             replyLikeButton.classList.toggle("bi-heart");
+
+            // Change title based on class name
+            if(replyLikeButton.classList.contains("bi-heart-fill")) {
+                replyLikeButton.title = "Remove Like"
+                replyLikesCount.innerText++;
+            }
+            else {
+                replyLikeButton.title = "Like Reply"
+                replyLikesCount.innerText--;
+            }
+            
         }
         else if(response.status === 406) {
             appendAlert("You cannot like your own reply", "info");
         }
         else {
             appendAlert("Internal Server error :(", "danger");
-        }
-
-        // Change title based on class name
-        if(replyLikeButton.classList.contains("bi-heart-fill")) {
-            replyLikeButton.title = "Remove Like"
-            replyLikesCount.innerText++;
-        }
-        else {
-            replyLikeButton.title = "Like Reply"
-            replyLikesCount.innerText--;
         }
     })
 
