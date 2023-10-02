@@ -1,5 +1,6 @@
 @{
-    PostInfoModel PostInfoObj = ViewData["PostInfoObj"] as PostInfoModel;
+    PostInfoModel PostInfoObj = ViewBag.PostInfoObj;
+    ReplyInfoModel SelectedReply = ViewBag.Reply;
     ViewData["Title"] = $"{PostInfoObj.UserName}'s Post";
 }
 
@@ -67,7 +68,7 @@
             </div>
 
             <div class="col-4">
-                <i class="bi bi-share text-primary" id="share-button" title="Share the Post"></i>
+                <i class="bi bi-share text-primary" id="share-post" title="Share the Post"></i>
             </div>
         
         </div>
@@ -79,7 +80,7 @@
 @* Display Replies for the post *@
 
 <script>
-    const postId = @PostInfoObj.PostId;
+    const postId = [];
     const replyIds = [];
 </script>
 
@@ -103,40 +104,36 @@
 
     @* Display Replies *@
     <div class="card-body">
+        @* Display the following when there are no replies to a post *@
         @if(PostInfoObj.Replies == null || PostInfoObj.Replies.Count() == 0) {
             <div class="text-muted text-center my-5">
                 There are no replies to this post yet
             </div>
         }
+
+        @* Display the following when there are/is replies to a post *@
         else {
-            @foreach(var Reply in PostInfoObj.Replies) {
-                <div class="card my-2 p-2">
-                    
-                    <div class="card-title">
-                        &#x40;@Reply.UserName
-                        
-                        <span class="float-end pe-2">
-                            @if(!Reply.Likes.Contains(User.Identity.Name)) {
-                                <i class="bi bi-heart me-1" id="reply-like-button" title="Like Reply"></i>
-                            }
-                            else {
-                                <i class="bi bi-heart-fill me-2" id="reply-like-button" title="Remove Like"></i>
-                            }
-                            <span id="reply-likes-count" class="me-3">@Reply.Likes.Count()</span>
 
-                            <script>
-                                replyIds.push(@Reply.ReplyId);
-                            </script>
-
-                            <i class="bi bi-share text-primary me-2" id="share-button" title="Share the Post"></i>
-                        </span>
-                    </div>
-
-                    <div class="card-body border-top px-2 pt-2 pb-0">
-                        @Html.Raw(Reply.ReplyContent)
-                    </div>
-
+            @* Display the following when the user has selected a single reply *@
+            if(SelectedReply != null) {
+                <div style="border-color: var(--bs-primary)">
+                    @await Component.InvokeAsync("Replies", new{
+                        Reply = SelectedReply
+                    })
                 </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="button" id="load-all-replies" class="mt-2 btn btn-primary">Load all replies</button>
+                </div>
+            }
+
+            @* Display the following to view all replies to the post *@
+            else {
+                @foreach(var Reply in PostInfoObj.Replies) {
+                    @await Component.InvokeAsync("Replies", new{
+                        Reply = Reply
+                    });
+                }
             }
         }
     </div>
@@ -150,3 +147,4 @@
     button.addEventListener("click", () => ReplyPost(postArea.innerHTML, @PostInfoObj.PostId));
 </script>
 <script src="~/js/Reply.js"></script>
+<script src="~/js/Share.js"></script>

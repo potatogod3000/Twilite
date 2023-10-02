@@ -1,0 +1,36 @@
+@{
+    ReplyInfoModel Reply = ViewBag.Reply;
+    if(ViewBag.PostId != null) {
+        int PostId = ViewBag.PostId;
+    }
+}
+
+<div class="card my-2 p-2">
+                        
+    <div class="card-title">
+        &#x40;@Reply.UserName
+        
+        <span class="float-end pe-2">
+            @if(!Reply.Likes.Contains(User.Identity.Name)) {
+                <i class="bi bi-heart me-1" id="reply-like-button" title="Like Reply"></i>
+            }
+            else {
+                <i class="bi bi-heart-fill me-2" id="reply-like-button" title="Remove Like"></i>
+            }
+            <span id="reply-likes-count" class="me-3">@Reply.Likes.Count()</span>
+
+            <i class="bi bi-share" id="share-reply" title="Share the Post"></i>
+            
+        </span>
+    </div>
+
+    <div class="card-body border-top px-2 pt-2 pb-0">
+        @Html.Raw(Reply.ReplyContent)
+    </div>
+
+</div>
+
+<script>
+    replyIds.push(@Reply.ReplyId);
+    postId.push(@Reply.PostId);
+</script>
