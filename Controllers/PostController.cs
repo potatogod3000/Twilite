@@ -225,10 +225,15 @@ public class PostController : Controller {
 
     [Authorize]
     [HttpGet]
-    public IActionResult Replies(int PostId) {
-        ViewData["PostInfoObj"] = _db.Posts.Include(x => x.Replies).FirstOrDefault(x => x.PostId == PostId);
+    public IActionResult Replies(int PostId ,int ReplyId) {
+        PostInfoModel Post = _db.Posts.Include(x => x.Replies).FirstOrDefault(x => x.PostId == PostId);
+        ViewBag.PostInfoObj = Post;
 
-        return View(ViewData);
+        if(ReplyId != null) {
+            ViewBag.Reply = Post.Replies.FirstOrDefault(r => r.ReplyId == ReplyId);
+        }
+
+        return View(ViewBag);
     }
 
     [Authorize]
