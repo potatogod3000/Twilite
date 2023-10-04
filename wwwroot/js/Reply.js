@@ -1,4 +1,3 @@
-const alertPlaceholder = document.getElementById('alert-placeholder');
 const replyLikeButtons = document.querySelectorAll("#reply-like-button");
 const replyLikesCounts = document.querySelectorAll("#reply-likes-count");
 const loadAllReplies = document.getElementById("load-all-replies");
@@ -23,44 +22,26 @@ function ReplyPost(replyString, postId) {
 
     // Handle responses
     .then(function(response) {
+        
         // Handle error response
-        if(response.status >= 400) {
-            let err = new Error();
-            if(response.status === 400) {
-                err.message = "Your reply is empty! A reply should contain atleast one character";
-            }
-            else if(response.status === 500) {
-                err.message = "Internal server error :(";
-            }
-            err.response = response;
-            err.status = response.status;
-            throw err;
+        if(response.status === 400) {
+            showToast("Your reply is empty! A reply should contain atleast one character", "info");
         }
+        else if(response.status === 500) {
+            showToast("Internal server error :(", "warning");
+        }
+        
         // Handle successful response
         else {
-            appendAlert("Reply posted!", "success");
+            showToast("Reply posted!", "success");
             window.location.reload();
         }
     })
 
     // Handle network/auth errors
     .catch(function(reject) {
-        appendAlert(reject.message, "danger");
+        showToast(reject, "danger");
     })
-}
-
-// Create a new wrapper div and add a bootstrap alert on-demand
-function appendAlert(message, type) {
-    const wrapper = document.createElement('div');
-
-    wrapper.innerHTML = [
-    `<div class="mt-3 mb-0 mx-3 alert alert-${type} alert-dismissible fade show" role="alert">`,
-    `   <div class="text-center">${message}</div>`,
-    `   <button type="button" class="btn-close" id="alert-close" data-bs-dismiss="alert" aria-label="Close"></button>`,
-    `</div>`
-    ].join('');
-
-    alertPlaceholder.append(wrapper);
 }
 
 // Reply Likes
@@ -94,10 +75,10 @@ function likeReply(index, replyLikeButton, replyLikesCount) {
             
         }
         else if(response.status === 406) {
-            appendAlert("You cannot like your own reply", "info");
+            showToast("You cannot like your own reply", "info");
         }
         else {
-            appendAlert("Internal Server error :(", "danger");
+            showToast("Internal Server error :(", "danger");
         }
     })
 
