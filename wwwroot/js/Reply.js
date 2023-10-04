@@ -65,7 +65,7 @@ function appendAlert(message, type) {
 
 // Reply Likes
 function likeReply(index, replyLikeButton, replyLikesCount) {
-    params = "PostId=" + postId[index] + "&ReplyId=" + replyIds[index];
+    params = "PostId=" + postIds[index] + "&ReplyId=" + replyIds[index];
 
     // Reply likes manipulation
     fetch("/Post/ReplyLikes", {
