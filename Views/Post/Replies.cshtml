@@ -27,7 +27,6 @@
     </div>
 
     @* Collapsing Rich Editor area *@
-    <div id="alert-placeholder"></div>
     <div class="mx-2 collapse p-2" id="RichEditor">
         <partial class="pb-2" name="_RichEditor"/>
         <div class="d-flex justify-content-end">
@@ -78,6 +77,8 @@
     let button = document.getElementById("submit-reply-button");
     button.addEventListener("click", () => ReplyPost(postArea.innerHTML, @Post.PostId));
 </script>
+
+<script src="~/js/Notifications.js"></script>
 <script src="~/js/LikePost.js"></script>
 <script src="~/js/Reply.js"></script>
 <script src="~/js/Share.js"></script>

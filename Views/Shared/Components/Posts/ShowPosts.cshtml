@@ -1,89 +1,88 @@
 @{
-    IEnumerable<PostInfoModel> PostInfoObj = ViewData["PostInfoObj"] as IEnumerable<PostInfoModel>;
+    PostInfoModel Post = ViewData["Post"] as PostInfoModel;
 }
 
-<script type="text/javascript">
-    let postIdArr = [];
-</script>
+<div class="card col-sm-11 mx-2 my-1">
+    <div class="card-body">
+        
+        @* Display user actions i.e., dropdown of actions for current post and user *@
+        <div class="row">
+            <div class="col-12">
+                @await Component.InvokeAsync("UserActions", Post)
+            </div>
 
-@foreach(var obj in PostInfoObj) {
-    <div class="card col-sm-11 mx-2 my-1">
-        <div class="card-body">
-            
-            @* Display user actions i.e., dropdown of actions for current post and user *@
-            <div class="row">
-                <div class="col-12">
-                    @await Component.InvokeAsync("UserActions", obj)
-                </div>
+            <div class="col-12">
+                @* Show posted and edited date. *@
+                <span class="text-muted" style="font-size: 13px">
+                    Posted: @Post.PostedDate
+                </span>
 
-                <div class="col-12">
-                    @* Show posted and edited date. *@
+                @if(Post.PostEditedDate != null) {
+                    <i class="bi bi-dot text-muted"></i>
                     <span class="text-muted" style="font-size: 13px">
-                        Posted: @obj.PostedDate
+                        Edited: @Post.PostEditedDate
                     </span>
+                }
+            </div>
+        </div>
 
-                    @if(obj.PostEditedDate != null) {
-                        <i class="bi bi-dot text-muted"></i>
-                        <span class="text-muted" style="font-size: 13px">
-                            Edited: @obj.PostEditedDate
-                        </span>
-                    }
-                </div>
+        @* Render the body of post after converting HTML content to plain text *@
+        <div class="my-2 px-2 pt-2 pb-0 border-top">
+            <p>@Html.Raw(Post.PostContent)</p>
+        </div>
+
+        @* Post action buttons i.e., Like, Reply and Share *@
+        <div class="row text-center pb-0">
+
+            <div class="col-4">
+                <a asp-controller="Post" asp-action="Replies" asp-route-PostId="@Post.PostId"><i class="bi bi-chat-left-text" id="reply-button" title="Replies"></i></a>
+                <span class="text-end" style="font-weight: normal; font-size: 13px">@Post.Replies.Count()</span>
             </div>
 
-            @* Render the body of post after converting HTML content to plain text *@
-            <div class="my-2 px-2 pt-2 pb-0 border-top">
-                <p>@Html.Raw(obj.PostContent)</p>
+            @* Display post likes *@
+            <div class="col-4">
+                @if(!User.Identity.IsAuthenticated) {
+                    <a asp-area="Identity" asp-page="/Account/Login" style="text-decoration: none">
+                        <i class="bi bi-heart" title="Login to Like this Post"></i>
+                    </a>
+                    <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@Post.Likes.Count()</span>
+                }
+                
+                else if(User.Identity.IsAuthenticated && User.Identity.Name != Post.UserName) {
+                    if(Post.Likes.Contains(User.Identity.Name)) {
+                        <i id="like-button" class="bi bi-heart-fill text-primary" title="Remove Like"></i>
+                        <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@Post.Likes.Count()</span>
+                    } else {
+                        <i id="like-button" class="bi bi-heart text-primary" title="Like Post"></i>
+                        <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@Post.Likes.Count()</span>
+                    }
+                }
+                
+                else if(User.Identity.Name == Post.UserName) {
+                    <i id="like-button" class="bi bi-heart text-primary" title="You cannot like your own post"></i>
+                    <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@Post.Likes.Count()</span>
+                }
             </div>
 
-            @* Post action buttons i.e., Like, Reply and Share *@
-            <div class="row text-center pb-0">
-
-                <div class="col-4">
-                    <a asp-controller="Post" asp-action="Replies" asp-route-PostId="@obj.PostId"><i class="bi bi-chat-left-text" id="reply-button" title="Replies"></i></a>
-                    <span class="text-end" style="font-weight: normal; font-size: 13px">@obj.Replies.Count()</span>
+            <div class="dropdown col-4">
+                <i class="bi bi-share text-primary" id="share-post" title="Share the Post" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                
+                <div class="dropdown-menu dropdown-menu-end" id="share-post-dropdown">
+                    <div class="input-group my-2 px-2">
+                        <input class="form-control" type="text" id="share-post-field" aria-label="Share Link" aria-describedby="share-copy-button" />
+                        <button class="btn btn-outline-primary" type="button" id="share-post-copy-button" title="Copy to Clipboard"><i class="bi bi-clipboard"></i></button>
+                    </div>
                 </div>
 
-                @* Display post likes *@
-                <div class="col-4">
-                    @if(!User.Identity.IsAuthenticated) {
-                        <a asp-area="Identity" asp-page="/Account/Login" style="text-decoration: none">
-                            <i class="bi bi-heart" title="Login to Like this Post"></i>
-                        </a>
-                        <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
-                    }
-                    
-                    else if(User.Identity.IsAuthenticated && User.Identity.Name != obj.UserName) {
-                        if(obj.Likes.Contains(User.Identity.Name)) {
-                            <i id="like-button" class="bi bi-heart-fill text-primary" title="Remove Like"></i>
-                            <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
-                        } else {
-                            <i id="like-button" class="bi bi-heart text-primary" title="Like Post"></i>
-                            <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
-                        }
-                    }
-                    
-                    else if(User.Identity.Name == obj.UserName) {
-                        <i id="like-button" class="bi bi-heart text-primary" title="You cannot like your own post"></i>
-                        <span class="text-end" style="font-weight: normal; font-size: 13px" id="like-display">@obj.Likes.Count()</span>
-                    }
-                </div>
-
-                <div class="col-4">
-                    <i class="bi bi-share text-primary" id="share-post" title="Share the Post"></i>
-                </div>
-            
             </div>
-
+        
         </div>
 
     </div>
 
-    <script type="text/javascript">
-        @* Pushing the PostId of each Post sequencially to postIdArr array for use in LikePost.js *@
-        postIdArr.push(@obj.PostId);
-    </script>
-}
+</div>
 
-<script src="~/js/LikePost.js"></script>
-<script src="~/js/Share.js"></script>
+<script type="text/javascript">
+    @* Pushing the PostId of each Post sequencially to postIdArr array for use in LikePost.js *@
+    postIds.push(@Post.PostId);
+</script>
