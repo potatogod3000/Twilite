@@ -8,65 +8,47 @@ if(likeButtons != null) {
 
         likeButtons[i].addEventListener("click", function() {
             let index = i;
-            likeButtonAction(likeButtons[i], likeDisplays[i]);
             postLikesAction(index, likeButtons[i], likeDisplays[i]);
         });
     }
 }
 
-function likeButtonAction(likeButton, likeDisplay) {
-    // Action performed when Liked    
-    if(likeButton.classList.contains("bi-heart")) {
-        likeButton.classList.toggle("bi-heart");
-        likeButton.classList.toggle("bi-heart-fill");
-        likeButton.title = "Remove Like";
-        liked = true;
-    }
-
-    // Action performed when Removing Like
-    else if(likeButton.classList.contains("bi-heart-fill")) {
-        likeButton.classList.toggle("bi-heart-fill");
-        likeButton.classList.toggle("bi-heart");
-        likeButton.title = "Like Post";
-        liked = false;
-    }
-
-    // Toggle the Likes number
-    toggleLikeNumbers(liked, likeDisplay);
-}
-
-function toggleLikeNumbers(liked, likeDisplay) {
-    if(liked) {
-        likeDisplay.innerText++;
-    }
-
-    else if(!liked && likeDisplay.innerText !== 0) {
-        likeDisplay.innerText--;
-    }
-}
-
 function postLikesAction(index, likeButton, likeDisplay) {
-    for(let i = 0; i < postIdArr.length; i++) {
-        if(postIdArr[i] === postIdArr[index]) {
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "/Post/LikePost?PostId="+postIdArr[i], true);
-            xhr.send();
+    const param = "PostId="+postIds[index];
+    
+    fetch("/Post/LikePost", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: param
+    })
+    
+    .then(function(response) {
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        console.log("Success: Post " + postIdArr[index]);
-                    } else if(xhr.status === 400) {
-                        likeButton.classList.toggle("bi-heart");
-                        likeButton.classList.toggle("bi-heart-fill");
-                        toggleLikeNumbers(!liked, likeDisplay);
-                        console.log("Error: BadRequest");
-                    } else {
-                        alert("Like Post : InternalServerError")
-                    }
-                }
+        if (response.status === 200) {
+            likeButton.classList.toggle("bi-heart");
+            likeButton.classList.toggle("bi-heart-fill");
+
+            if(likeButton.classList.contains("bi-heart-fill")) {
+                likeButton.title = "Remove Like";
+                likeDisplay.innerText++;
             }
-
+            else {
+                likeButton.title = "Like Post";
+                likeDisplay.innerText--;
+            }
         }
-    }
+        else if(response.status === 406) {
+            showToast("You cannot like your own post", "info");
+        }
+        else {
+            showToast("Internal Server error :(", "warning");
+        }
+
+    })
+
+    .catch(function(reject) {
+        showToast(reject, "danger");
+    });
 }
