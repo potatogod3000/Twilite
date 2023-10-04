@@ -13,8 +13,8 @@ public class Posts : ViewComponent {
         _db = db;
     }
 
-    public IViewComponentResult Invoke(IEnumerable<PostInfoModel> Posts) {
-        ViewData["PostInfoObj"] = Posts;
+    public IViewComponentResult Invoke(PostInfoModel Post) {
+        ViewData["Post"] = Post;
         
         return View("ShowPosts", ViewData);
     }

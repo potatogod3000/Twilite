@@ -207,7 +207,7 @@ public class PostController : Controller {
             }
         }
         else {
-            return StatusCode(StatusCodes.Status400BadRequest);
+            return StatusCode(StatusCodes.Status406NotAcceptable);
         }
 
         if(ModelState.IsValid) {
@@ -227,7 +227,7 @@ public class PostController : Controller {
     [HttpGet]
     public IActionResult Replies(int PostId ,int ReplyId) {
         PostInfoModel Post = _db.Posts.Include(x => x.Replies).FirstOrDefault(x => x.PostId == PostId);
-        ViewBag.PostInfoObj = Post;
+        ViewBag.Post = Post;
 
         if(ReplyId != null) {
             ViewBag.Reply = Post.Replies.FirstOrDefault(r => r.ReplyId == ReplyId);

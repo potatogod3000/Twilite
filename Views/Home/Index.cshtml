@@ -30,8 +30,19 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    const postIds = [];
+</script>
+
+
 <div class="container-fluid">
     <div id="posts-area" class="row justify-content-center">
-        @await Component.InvokeAsync("Posts", Posts)
+        @foreach(var Post in Posts) {
+            @await Component.InvokeAsync("Posts", Post)
+        }
     </div>
 </div>
+
+<script src="~/js/Notifications.js"></script>
+<script src="~/js/LikePost.js"></script>
+<script src="~/js/Share.js"></script>
