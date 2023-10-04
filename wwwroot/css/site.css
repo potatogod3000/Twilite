@@ -159,3 +159,11 @@ body {
 .external-icons:hover {
   width: 48px;
 }
+
+#share-reply-dropdown.dropdown-menu {
+  min-width: 350px;
+}
+
+#share-post-dropdown.dropdown-menu {
+  min-width: 350px;
+}
