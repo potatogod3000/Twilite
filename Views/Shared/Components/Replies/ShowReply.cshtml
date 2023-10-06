@@ -19,7 +19,17 @@
             }
             <span id="reply-likes-count" class="me-3">@Reply.Likes.Count()</span>
 
-            <i class="bi bi-share" id="share-reply" title="Share the Post"></i>
+            <span class="dropdown">
+                <i class="bi bi-share" id="share-reply" title="Share the Reply" data-bs-toggle="dropdown" aria-expanded="false"></i>
+
+                <div class="dropdown-menu dropdown-menu-end" id="share-reply-dropdown">
+                    <div class="input-group my-2 px-2">
+                        <input class="form-control" type="text" id="share-reply-field" aria-label="Share Link" aria-describedby="share-copy-button" />
+                        <button class="btn btn-outline-primary" type="button" id="share-reply-copy-button" title="Copy to Clipboard"><i class="bi bi-clipboard"></i></button>
+                    </div>
+                </div>
+
+            </span>
             
         </span>
     </div>
@@ -29,8 +39,3 @@
     </div>
 
 </div>
-
-<script>
-    replyIds.push(@Reply.ReplyId);
-    postId.push(@Reply.PostId);
-</script>

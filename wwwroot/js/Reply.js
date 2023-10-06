@@ -9,7 +9,7 @@ for(let i = 0; i < replyLikeButtons.length; i++) {
 
 // Reply function
 function ReplyPost(replyString, postId) {
-    const params = "ReplyString="+replyString+"&PostId="+postId;
+    const params = `ReplyString=${replyString}&PostId=${postId}`;
 
     // Post replies to backend Controller
     fetch("/Post/Replies", {
@@ -46,7 +46,7 @@ function ReplyPost(replyString, postId) {
 
 // Reply Likes
 function likeReply(index, replyLikeButton, replyLikesCount) {
-    params = "PostId=" + postIds[index] + "&ReplyId=" + replyIds[index];
+    params = `PostId=${replyPostIds[index]}&ReplyId=${replyIds[index]}`;
 
     // Reply likes manipulation
     fetch("/Post/ReplyLikes", {

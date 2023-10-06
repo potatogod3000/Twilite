@@ -15,6 +15,11 @@
             </div>
 
             <ul class="dropdown-menu">
+
+                <li><a class="dropdown-item" title="Share the User">
+                    <i class="bi bi-share me-2"></i>Share User
+                </a></li>
+
                 @* If a post belongs to the current user, show these items in dropdown *@
                 @if(User.Identity.Name == @CurrentPostModel.UserName) {
                     <li><a asp-area="Identity" asp-page="/Account/Manage/Index" asp-route-Post="@CurrentPostModel" class="dropdown-item">
@@ -48,6 +53,7 @@
                         </a></li>
                     }
                 }
+
             </ul>
         }
         
@@ -57,7 +63,7 @@
                 &#x40;@CurrentPostModel.UserName
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item text-primary" title="Login or Register to Interact" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right me-2"></i>Login/Register</a></li>
+                <li><a class="dropdown-item text-primary" title="Login or Register to Interact" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-box-arrow-in-right me-2"></i>Login/Register</a></li>
             </ul>
         }
         
