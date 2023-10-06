@@ -1,52 +1,103 @@
 @{
     UserProfileModel CurrentUserProfile = ViewData["CurrentUserProfile"] as UserProfileModel;
-    IEnumerable<PostInfoModel> CurrentUserPosts = ViewData["CurrentUserPosts"] as IEnumerable<PostInfoModel>;
-}
+    List<PostInfoModel> CurrentUserPosts = ViewData["CurrentUserPosts"] as List<PostInfoModel>;
+    List<List<ReplyInfoModel>> AllReplies = ViewData["AllReplies"] as List<List<ReplyInfoModel>>;
 
-@{
     ViewData["Title"] = @CurrentUserProfile.UserName + "'s Profile";
 }
 
 <h1 class="text-center display-4"><span>@CurrentUserProfile.UserName</span>'s User Profile</h1>
 
-<div class="container-fluid card mt-3">
-    
-    <h3 class="mt-2">Posts</h3>
-    <hr class="my-0"/>
-    <div class="row justify-content-center my-2 mx-2">
-        @{
-            if(CurrentUserPosts.Count() != 0) {
-                @await Component.InvokeAsync("Posts", CurrentUserPosts)
-            } else {
-                <div class="card-body my-2">
-                    <h5 class="text-center">You have not posted anything yet.</h5>
-                </div>
+@* Display Posts *@
+
+<script>
+    const postIds = [];
+    const replyPostIds = [];
+    const replyIds = [];
+</script>
+
+<div class="container-fluid card mt-3 mb-2">
+    <h3 class="mt-2 pb-2 border-bottom">Posts</h3>
+
+    <div class="row justify-content-center my-2">
+        @if(CurrentUserPosts.Count() != 0) {
+            foreach(var Post in CurrentUserPosts) {
+                @await Component.InvokeAsync("Posts", Post)
+
+                <script>
+                    postIds.push(@Post.PostId);
+                </script>
             }
+        }
+        else {
+            <div class="card-body my-2">
+                <h5 class="text-center">You have not posted anything yet.</h5>
+            </div>
         }
         
     </div>
 
 </div>
 
+@* Display user's Replies from various Posts *@
+<div class="container-fluid card my-2">
+    <h3 class="mt-2 pb-2 border-bottom">Replies</h3>
+
+    @foreach(var PostReplies in AllReplies) {
+        
+        <div class="my-2">
+            <div class="row">
+                <a class="link" asp-controller="Post" asp-action="Replies" asp-route-PostId="@PostReplies[0].Post.PostId">Post @PostReplies[0].Post.PostId</a>
+            </div>
+            <div class="row justify-content-center">
+                
+                <div class="col-11 mx-2 my-1">
+                    @foreach(var Reply in PostReplies) {
+                        @await Component.InvokeAsync("Replies", new{
+                            Reply = Reply,
+                            PostId = Reply.PostId
+                        })
+
+                        <script>
+                            replyPostIds.push(@Reply.Post.PostId);
+                            replyIds.push(@Reply.ReplyId);
+                        </script>
+
+                    }
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+@* Show Followers and Following details *@
 <div class="container-fluid my-2">
     <div class="row justify-content-center">
-        <div class="container-fluid card col-md-5 m-2">
-            <h3 class="mt-2">Followers (@CurrentUserProfile.Followers.Count())</h3>
-            <hr class="my-0"/>
-            <ul class="my-2">
-                @foreach(var follower in CurrentUserProfile.Followers) {
-                    <li><a class="link" asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@follower">@follower</a></li>
-                }
-            </ul>
+        <div class="container-fluid card col-5 me-1">
+            <h3 class="mt-2 pb-2 border-bottom">Followers (@CurrentUserProfile.Followers.Count())</h3>
+            @if(CurrentUserProfile.Followers.Count() != 0) {
+                <ul>
+                    @foreach(var follower in CurrentUserProfile.Followers) {
+                        <li><a class="link" asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@follower">@follower</a></li>
+                    }
+                </ul>
+            }
         </div>
-        <div class="container-fluid card col-md-5 m-2">
-            <h3 class="mt-2">Following (@CurrentUserProfile.Following.Count())</h3>
-            <hr class="my-0"/>
-            <ul class="my-2">
-                @foreach(var following in CurrentUserProfile.Following) {
-                    <li><a class="link" asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@following">@following</a></li>
-                }
-            </ul>
+        <div class="container-fluid card col-5 ms-1">
+            <h3 class="mt-2 pb-2 border-bottom">Following (@CurrentUserProfile.Following.Count())</h3>
+            @if(CurrentUserProfile.Following.Count() != 0) {
+                <ul>
+                    @foreach(var following in CurrentUserProfile.Following) {
+                        <li><a class="link" asp-controller="Profile" asp-action="UserProfile" asp-route-UserName="@following">@following</a></li>
+                    }
+                </ul>
+            }
         </div>
     </div>
 </div>
+
+<script src="~/js/Notifications.js"></script>
+<script src="~/js/Post.js"></script>
+<script src="~/js/Reply.js"></script>
+<script src="~/js/Share.js"></script>
