@@ -1,8 +1,7 @@
-let likeButtons = document.querySelectorAll("#like-button");
-let likeDisplays = document.querySelectorAll("#like-display");
-let liked;
+const likeButtons = document.querySelectorAll("#like-button");
+const likeDisplays = document.querySelectorAll("#like-display");
 
-if(likeButtons != null) {
+if(likeButtons) {
     for(let i = 0; i < likeButtons.length; i++) {
         likeButtons[i].style.cursor = "Pointer";
 
