@@ -27,10 +27,9 @@ sharePostDropdownContent.forEach(function(dropdownContent) {
 if(sharePostButtons) {
     for(let i = 0; i < sharePostButtons.length; i++) {
         sharePostButtons[i].style.cursor = "pointer";
-        sharePostFields[i].value = `${window.location.href}`;
-        if(!sharePostFields[i].value.includes("?PostId=")) {
-            sharePostFields[i].value += `&PostId=${postIds[i]}`
-        }
+        sharePostButtons[i].addEventListener("click", function() {
+            sharePostFields[i].value = `${window.location.origin}/Post/Replies?PostId=${postIds[i]}`;
+        });
 
         sharePostCopyButtons[i].addEventListener("click", function() {
             sharePostFields[i].select();
@@ -44,10 +43,9 @@ if(sharePostButtons) {
 if(shareReplyButtons) {
     for(let i = 0; i < shareReplyButtons.length; i++) {
         shareReplyButtons[i].style.cursor = "pointer";
-        shareReplyFields[i].value = `${window.location.href}`;
-        if(!shareReplyFields[i].value.includes("&ReplyId=")) {
-            shareReplyFields[i].value += `&ReplyId=${replyIds[i]}`;
-        }
+        shareReplyButtons[i].addEventListener("click", function() {
+            shareReplyFields[i].value = `${window.location.origin}/Post/Replies?PostId=${replyPostIds[i]}&ReplyId=${replyIds[i]}`;
+        });
         
         shareReplyCopyButtons[i].addEventListener("click", function() {
             shareReplyFields[i].select();
@@ -63,7 +61,9 @@ if(shareUserButtons) {
     for(let i = 0; i < shareUserButtons.length; i++) {
         shareUserButtons[i].style.cursor = "pointer";
         shareUserButtons[i].addEventListener("click", function() {
-
+            const link = `${window.location.origin}/Profile`
+            navigator.clipboard.writeText(link);
+            showToast("Link Copied", "normal");
         });
     }
 }
