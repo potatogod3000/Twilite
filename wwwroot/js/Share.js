@@ -61,7 +61,7 @@ if(shareUserButtons) {
     for(let i = 0; i < shareUserButtons.length; i++) {
         shareUserButtons[i].style.cursor = "pointer";
         shareUserButtons[i].addEventListener("click", function() {
-            const link = `${window.location.origin}/Profile`
+            const link = `${window.location.origin}/Profile/UserProfile?UserName=${userNamesPost[i]}`
             navigator.clipboard.writeText(link);
             showToast("Link Copied", "normal");
         });
