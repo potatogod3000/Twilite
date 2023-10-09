@@ -5,10 +5,6 @@
     IEnumerable<PostInfoModel> Posts = ViewData["Posts"] as IEnumerable<PostInfoModel>;
 }
 
-<script>
-    const postIds = [];
-</script>
-
 <div class="text-center">
         @{
         if(SignInManager.IsSignedIn(User)) {
@@ -49,3 +45,4 @@
 <script src="~/js/Notifications.js"></script>
 <script src="~/js/Post.js"></script>
 <script src="~/js/Share.js"></script>
+<script src="~/js/Follow.js"></script>
