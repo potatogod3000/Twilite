@@ -121,73 +121,83 @@ public class PostController : Controller {
     }
 
     [Authorize]
-    [HttpGet]
+    [HttpPost]
     public IActionResult AddFollower(string PostUserName, string CurrentUserName) {
-        // Add Following info to Post's User
-        UserProfileModel PostUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == PostUserName);
+        try {
+            // Add Following info to Post's User
+            UserProfileModel PostUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == PostUserName);
+            
+            if(PostUserProfile == null) {
+                return BadRequest();
+            }
+
+            if(PostUserProfile.UserName != CurrentUserName && !PostUserProfile.Followers.Contains(CurrentUserName)) {
+                PostUserProfile.Followers.Add(CurrentUserName);
+
+                if(ModelState.IsValid) {
+                    _db.Update(PostUserProfile);
+                    _db.SaveChanges();
+                }
+            }
+
+            // Add Follower info to Post's User
+            UserProfileModel CurrentUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == CurrentUserName);
+
+            if(CurrentUserProfile == null) {
+                return BadRequest();
+            }
+
+            if(CurrentUserProfile.UserName != PostUserName && !CurrentUserProfile.Following.Contains(PostUserName)) {
+                CurrentUserProfile.Following.Add(PostUserName);
+
+                if(ModelState.IsValid) {
+                    _db.Update(CurrentUserProfile);
+                    _db.SaveChanges();
+                    return StatusCode(StatusCodes.Status200OK);
+                }
+            }
+        }
+        catch(Exception ex) {
+            BadRequest( new {message = ex.Message, status = 400} );
+        }
         
-        if(PostUserProfile == null) {
-            return BadRequest();
-        }
-
-        if(PostUserProfile.UserName != CurrentUserName && !PostUserProfile.Followers.Contains(CurrentUserName)) {
-            PostUserProfile.Followers.Add(CurrentUserName);
-
-            if(ModelState.IsValid) {
-                _db.Update(PostUserProfile);
-                _db.SaveChanges();
-            }
-        }
-
-        // Add Follower info to Post's User
-        UserProfileModel CurrentUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == CurrentUserName);
-
-        if(CurrentUserProfile == null) {
-            return BadRequest();
-        }
-
-        if(CurrentUserProfile.UserName != PostUserName && !CurrentUserProfile.Following.Contains(PostUserName)) {
-            CurrentUserProfile.Following.Add(PostUserName);
-
-            if(ModelState.IsValid) {
-                _db.Update(CurrentUserProfile);
-                _db.SaveChanges();
-            }
-        }
-
-        TempData["FollowMessage"] = $"You followed {PostUserName}";
-        return RedirectToAction("Explore", "Actions");
+        return StatusCode(StatusCodes.Status500InternalServerError);
     }
 
     [Authorize]
-    [HttpGet]
+    [HttpPost]
     public IActionResult RemoveFollower(string PostUserName, string CurrentUserName) {
-        // Remove Following info from Post's User
-        UserProfileModel PostUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == PostUserName);
-        
-        if(PostUserProfile.Followers.Contains(CurrentUserName)) {
-            PostUserProfile.Followers.Remove(CurrentUserName);
-        }
-        
-        if(ModelState.IsValid) {
+        try {
+            // Remove Following info from Post's User
+            UserProfileModel PostUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == PostUserName);
+            
+            if(PostUserProfile.Followers.Contains(CurrentUserName)) {
+                PostUserProfile.Followers.Remove(CurrentUserName);
+            }
+            
+            if(ModelState.IsValid) {
                 _db.Update(PostUserProfile);
                 _db.SaveChanges();
-        }
+            }
 
-        // Remove Follower info from Post's User
-        UserProfileModel CurrentUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == CurrentUserName);
-        
-        if(CurrentUserProfile.Following.Contains(PostUserName)) {
-            CurrentUserProfile.Following.Remove(PostUserName);
-        }
-        
-        if(ModelState.IsValid) {
+            // Remove Follower info from Post's User
+            UserProfileModel CurrentUserProfile = _db.UserProfiles.FirstOrDefault(x => x.UserName == CurrentUserName);
+            
+            if(CurrentUserProfile.Following.Contains(PostUserName)) {
+                CurrentUserProfile.Following.Remove(PostUserName);
+            }
+            
+            if(ModelState.IsValid) {
                 _db.Update(CurrentUserProfile);
                 _db.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK);
+            }
         }
-
-        TempData["FollowMessage"] = $"You unfollowed {PostUserName}";
-        return RedirectToAction("Explore", "Actions");
+        catch(Exception ex) {
+            BadRequest( new {message = ex.Message, status = 400} );
+        }
+        
+        return StatusCode(StatusCodes.Status500InternalServerError);
     }
 
     [Authorize]
