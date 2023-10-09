@@ -1,4 +1,5 @@
-//----------Usernames are pushed to userNamesFollow array inside the UserAction.cshtml page----------//
+//----------Eligible to follow usernames are pushed to userNamesFollow array inside the UserActions page----------//
+//----------Following status is pushed to isFollowed array inside UserActions pages----------//
 
 const follow = document.querySelectorAll("#follow");
 // const replyFollow = document.querySelectorAll("#reply-follow");

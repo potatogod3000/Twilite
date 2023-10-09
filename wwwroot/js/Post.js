@@ -1,3 +1,5 @@
+//----------Post IDs are pushed to postIds array inside Index, Explore, Replies & UserProfile pages----------//
+
 const likeButtons = document.querySelectorAll("#like-button");
 const likeDisplays = document.querySelectorAll("#like-display");
 

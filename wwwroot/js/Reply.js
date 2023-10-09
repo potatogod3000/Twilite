@@ -1,3 +1,6 @@
+//----------Reply IDs are pushed to replyIds array inside Replies & UserProfile pages----------//
+//----------Post IDs for replies are pushed to replyPostIds array inside Replies & UserProfile pages----------//
+
 const replyLikeButtons = document.querySelectorAll("#reply-like-button");
 const replyLikesCounts = document.querySelectorAll("#reply-likes-count");
 const loadAllReplies = document.getElementById("load-all-replies");

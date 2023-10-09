@@ -1,3 +1,5 @@
+//----------All post usernames are pushed to userNamesPost array inside the ShowPosts.cshtml page----------//
+
 const sharePostButtons = document.querySelectorAll("#share-post");
 const shareReplyButtons = document.querySelectorAll("#share-reply");
 const shareUserButtons = document.querySelectorAll("#share-user");
