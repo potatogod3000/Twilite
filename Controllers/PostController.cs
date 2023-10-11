@@ -17,107 +17,68 @@ public class PostController : Controller {
         _db = db;
     }
 
-
-    [Authorize]
-    [HttpPost]
-    public IActionResult CreatePost(PostInfoModel Post) {
-        Post.UserName = User.Identity.Name;
-        Post.PostedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
-
-        if(Post.PostContent == null) {
-            ModelState.AddModelError("", "You haven't entered anything in the input area.");
-        }
-        else {
-            _db.Posts.Update(Post);
-            _db.SaveChanges();
-
-            TempData["PostMessage"] = "Your post is now online!";
-            return RedirectToAction("Explore", "Actions");        
-        }
-        
-        return View(Post);
-    }
-
-
-    [Authorize]
     [HttpGet]
     public IActionResult CreatePost() {
         return View();
     }
 
-    [Authorize]
-    [HttpGet]
-    public IActionResult EditPost(int? PostId) {
-        if(PostId == null || PostId == 0) {
-            
-            return RedirectToAction("Explore", "Actions");
-        }
-        
-        PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
-        if(PostInfoObj == null) {
-
-            return RedirectToAction("Explore", "Actions");
-        }
-
-        return View(PostInfoObj);
-    }
-
-    [Authorize]
     [HttpPost]
-    public IActionResult EditPost(PostInfoModel Post) {
-        int? PostId = Post.PostId;
-        PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
-        
-        Post.Likes = PostInfoObj.Likes;
-        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
+    public IActionResult CreatePost(PostInfoModel Post) {
+        Post.PostedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
 
-        if(PostInfoObj.PostContent == Post.PostContent) {
-            ModelState.AddModelError("", "You haven't made any changes to this post.");
+        if(Post.PostContent == null) {
+            const string response = "You haven't entered anything in the input area";
+            return BadRequest(response);
+            //return StatusCode(StatusCodes.Status400BadRequest);
         }
-
-        if(Post.UserName == User.Identity.Name && ModelState.IsValid) {
-            // Clear all previous tracking of the ApplicationDbContext _db
-            _db.ChangeTracker.Clear();
-            
-            _db.Posts.Update(Post);
+        else {
+            _db.Posts.Add(Post);
             _db.SaveChanges();
 
-            TempData["PostMessage"] = "Post updated";
-            return RedirectToAction("Explore", "Actions");
-        }   
-
-        return View(PostInfoObj);
+            return StatusCode(StatusCodes.Status200OK);
+        }
     }
 
     [HttpPost]
-    [Authorize]
-    public IActionResult DeletePost(PostInfoModel Post) {
+    public IActionResult EditPost(int PostId, string PostContent) {
+
+        PostInfoModel? Post = _db.Posts.FirstOrDefault(id => id.PostId == PostId);
+        
+        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
+
+        if(Post.PostContent == PostContent) {
+            const string response = "You haven't made any changes to this post";
+            return BadRequest(response);
+        }
+
+        else if(Post.UserName == User.Identity.Name && ModelState.IsValid) {
+            // Clear all previous tracking of the ApplicationDbContext _db
+            //_db.ChangeTracker.Clear();
+            Post.PostContent = PostContent;
+            _db.Posts.Update(Post);
+            _db.SaveChanges();
+            
+            return StatusCode(StatusCodes.Status200OK);
+        }
+
+        else {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [HttpPost]
+    public IActionResult DeletePost(int PostId) {
+
+        PostInfoModel Post = _db.Posts.FirstOrDefault(x => x.PostId == PostId);
         
         if(User.Identity.Name == Post.UserName) {
             _db.Posts.Remove(Post);
             _db.SaveChanges();
-            return RedirectToAction("Explore", "Actions");
+            return StatusCode(StatusCodes.Status200OK);
         }
-
-        TempData["PostMessage"] = "Post deleted";
-        return RedirectToAction("Explore", "Actions");
-    }
-
-    [HttpGet]
-    [Authorize]
-    public IActionResult DeletePost(int? PostId) {
-
-        if(PostId == null || PostId == 0) {
-            return RedirectToAction("Explore", "Actions");
+        else {
+            return StatusCode(StatusCodes.Status400BadRequest);
         }
-        
-        PostInfoModel? PostInfoObj = _db.Posts.FirstOrDefault(id=>id.PostId == PostId);
-
-        if(PostInfoObj == null) {
-            return RedirectToAction("Explore", "Actions");
-        }
-
-        return View(PostInfoObj);
     }
 
     [Authorize]
