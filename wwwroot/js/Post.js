@@ -61,16 +61,15 @@ function postLikesAction(index, likeButton, likeDisplay) {
 
 // Create Post
 function createPost(currentUserName, postContent) {
-    const postModel = {
+    const params = JSON.stringify({
         UserName: currentUserName,
         PostContent: postContent
-    };
-    const params = `Post=${postModel}`;
+    });
 
     fetch("/Post/CreatePost", {
         method: "POST",
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json; charset=utf-8"
         },
         body: params
     })
