@@ -1,10 +1,10 @@
 //----------Post IDs are pushed to postIds array inside Index, Explore, Replies & UserProfile pages----------//
+//----------Current user's Post IDs are pushed to currentUserPostIds array inside UserActions pages----------//
 
 const likeButtons = document.querySelectorAll("#like-button");
 const likeDisplays = document.querySelectorAll("#like-display");
-const createPostButtons = document.querySelectorAll("#");
-const editPostButtons = document.querySelectorAll("#");
-const deletePostButtons = document.querySelectorAll("#");
+const editPostButtons = document.querySelectorAll("#edit-post");
+const deletePostButtons = document.querySelectorAll("#delete-post");
 
 // Assign event listeners to all the buttons (if the page contains Like buttons)
 if(likeButtons) {
@@ -14,6 +14,25 @@ if(likeButtons) {
         likeButtons[i].addEventListener("click", function() {
             let index = i;
             postLikesAction(index, likeButtons[i], likeDisplays[i]);
+        });
+    }
+}
+
+// Assign event listeners to all edit and delete buttons (if the page contains the buttons)
+if(editPostButtons && deletePostButtons) {
+    for(let i = 0; i < editPostButtons.length; i++) {
+        editPostButtons[i].style.cursor = "Pointer";
+
+        editPostButtons[i].addEventListener("click", function() {
+            performEdit(currentUserPostIds[i]);
+        });
+    }
+
+    for(let i = 0; i < deletePostButtons.length; i++) {
+        deletePostButtons[i].style.cursor = "Pointer";
+
+        deletePostButtons[i].addEventListener("click", function() {
+            deletePost(currentUserPostIds[i]);
         });
     }
 }
@@ -57,6 +76,21 @@ function postLikesAction(index, likeButton, likeDisplay) {
     .catch(function(reject) {
         showToast(reject, "danger");
     });
+}
+
+// Perform DOM manipulations to edit post
+function performEdit(currentPostId) {
+    const parentDiv = document.querySelector(`#post-${currentPostId}`);
+    const originalPostContent = document.querySelector(`#post-${currentPostId}-content`);
+
+    const innerHtmlStore = parentDiv.innerHTML;
+    const editDivContent = document.createElement("div");
+
+    editDivContent.innerHTML = //`<Partial name="_RichEditor">` Implement way to retrive Partial View
+    `<button class="btn btn-primary float-end">Edit Post</button>`;
+
+    parentDiv.innerHTML = editDivContent;
+    postArea.innerText = originalPostContent;
 }
 
 // Create Post
@@ -106,7 +140,7 @@ function editPost(postId, postContent) {
     })
 
     .then(function(response) {
-
+        
     })
 
     .catch(function(reject) {
@@ -127,10 +161,25 @@ function deletePost(postId) {
     })
 
     .then(function(response) {
+        if(response.status === 200) {
+            showToast("Your post has been deleted!", "info");
+            window.location.reload();
+        }
+        else if(response.status === 400) {
+            return response.text();
+        }
+        else {
+            const err = new Error();
+            err.message = "Server Error :(";
+            throw err;
+        }
+    })
 
+    .then(function(text) {
+        showToast(text, "warning");
     })
 
     .catch(function(reject) {
-
+        showToast(reject.message, "danger");
     });
 }

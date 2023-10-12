@@ -5,7 +5,7 @@
 }
 
 <h1 class="display-4 text-center">Edit Post</h1>
-<form method="post" class="row justify-content-center">
+<form class="row justify-content-center">
     <div class="card border-0">
         
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -17,17 +17,20 @@
         </div>
 
         <div class="text-end mb-2">
-            <button id="edit-button" class="btn btn-primary" type="submit" asp-route-PostId="@Model.PostId" asp-route-UserName="@Model.UserName" asp-route-PostedDate="@Model.PostedDate">Update</button>
+            <button id="edit-button" class="btn btn-primary" type="button" asp-route-PostId="@Model.PostId" asp-route-UserName="@Model.UserName" asp-route-PostedDate="@Model.PostedDate">Update</button>
         </div>
     </div>
 </form>
 
+<script src="~/js/Post.js"></script>
 <script>
     button = document.getElementById("edit-button");
-    document.addEventListener("DOMContentLoaded", function() {
+    @* document.addEventListener("DOMContentLoaded", function() {
         postArea.innerHTML = hiddenPostArea.innerText;
+    }); *@
+    button.addEventListener("click", function() {
+        editPost(@Model.PostId, postArea.innerHTML);
     });
-    button.addEventListener("click", onPost);
 </script>
 
 @section Scripts {

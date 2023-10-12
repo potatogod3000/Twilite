@@ -17,48 +17,65 @@ public class PostController : Controller {
         _db = db;
     }
 
-    [HttpGet]
-    public IActionResult CreatePost() {
-        return View();
-    }
-
     [HttpPost]
-    public IActionResult CreatePost(PostInfoModel Post) {
-        Post.PostedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
+    public IActionResult CreatePost([FromBody] PostInfoModel Post) {
+        if(Post == null) {
+            const string response = "Error in received data";
+            return BadRequest(response);
+        }
 
-        if(Post.PostContent == null) {
+        else if(Post.PostContent == null) {
             const string response = "You haven't entered anything in the input area";
             return BadRequest(response);
-            //return StatusCode(StatusCodes.Status400BadRequest);
         }
-        else {
-            _db.Posts.Add(Post);
-            _db.SaveChanges();
 
-            return StatusCode(StatusCodes.Status200OK);
+        else {
+            if(Post.UserName == User.Identity.Name) {
+                Post.PostedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
+
+                _db.Posts.Add(Post);
+                _db.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else {
+                return BadRequest("You are not authorized to post");
+            }
         }
+    }
+
+    [HttpGet]
+    public IActionResult EditPost(PostInfoModel Post) {
+        return View(Post);
     }
 
     [HttpPost]
     public IActionResult EditPost(int PostId, string PostContent) {
 
         PostInfoModel? Post = _db.Posts.FirstOrDefault(id => id.PostId == PostId);
-        
-        Post.PostEditedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
 
-        if(Post.PostContent == PostContent) {
-            const string response = "You haven't made any changes to this post";
+        if(Post == null) {
+            const string response = "Error in received data";
+            return BadRequest(response);
+        } 
+
+        else if(PostContent == null) {
+            const string response = "You haven't entered anything in the input area";
             return BadRequest(response);
         }
 
         else if(Post.UserName == User.Identity.Name && ModelState.IsValid) {
-            // Clear all previous tracking of the ApplicationDbContext _db
-            //_db.ChangeTracker.Clear();
-            Post.PostContent = PostContent;
-            _db.Posts.Update(Post);
-            _db.SaveChanges();
-            
-            return StatusCode(StatusCodes.Status200OK);
+            if(Post.PostContent == PostContent) {
+                const string response = "You haven't made any changes to this post";
+                return BadRequest(response);
+            }
+            else {
+                Post.PostEditedDate = $"{DateTime.UtcNow.ToString("HH:mm")} {DateTime.UtcNow.ToString("MMM dd, yyyy")}";
+                Post.PostContent = PostContent;
+                _db.Posts.Update(Post);
+                _db.SaveChanges();
+                
+                return StatusCode(StatusCodes.Status200OK);
+            }
         }
 
         else {
@@ -71,13 +88,19 @@ public class PostController : Controller {
 
         PostInfoModel Post = _db.Posts.FirstOrDefault(x => x.PostId == PostId);
         
-        if(User.Identity.Name == Post.UserName) {
+        if(Post == null) {
+            const string response = "Error in received data";
+            return BadRequest(response);
+        }
+
+        else if(User.Identity.Name == Post.UserName) {
             _db.Posts.Remove(Post);
             _db.SaveChanges();
             return StatusCode(StatusCodes.Status200OK);
         }
+
         else {
-            return StatusCode(StatusCodes.Status400BadRequest);
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 

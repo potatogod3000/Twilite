@@ -59,13 +59,23 @@
     @* Declaring all the global variables that are used in various pages *@
     <script>
         const postIds = [];
+        const currentUserPostIds = [];
         const replyPostIds = [];
         const replyIds = [];
         const userNamesPost = [];
         const userNamesFollow = [];
         const isFollowed = [];
-        const currentUserName = "@User.Identity.Name";    
     </script>
+    @if(User.Identity.IsAuthenticated) {
+        <script>
+            const currentUserName = "@User.Identity.Name";
+        </script>
+    }
+    else {
+        <script>
+            const currentUserName = null;
+        </script>
+    }
 
     <div class="container">
         <main role="main" class="pb-3">
