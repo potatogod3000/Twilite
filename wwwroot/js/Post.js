@@ -79,18 +79,72 @@ function postLikesAction(index, likeButton, likeDisplay) {
 }
 
 // Perform DOM manipulations to edit post
-function performEdit(currentPostId) {
+async function performEdit(currentPostId) {
     const parentDiv = document.querySelector(`#post-${currentPostId}`);
-    const originalPostContent = document.querySelector(`#post-${currentPostId}-content`);
-
+    const originalPostContent = document.querySelector(`#post-${currentPostId}-content`).innerHTML;
+    const postScript = document.getElementById("post-script");
     const innerHtmlStore = parentDiv.innerHTML;
-    const editDivContent = document.createElement("div");
+    
+    parentDiv.innerHTML = `<div class="d-flex align-items-center justify-content-between mb-3 mx-2">
+    <span>Edit Post</span>
+    <span><a class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-x-lg" title="Cancel Edit" id="cancel-edit-button"></i></a></span>
+    </div>`;
 
-    editDivContent.innerHTML = //`<Partial name="_RichEditor">` Implement way to retrive Partial View
-    `<button class="btn btn-primary float-end">Edit Post</button>`;
+    // Fetch _RichEditor Partial and insert it inside post's card div
+    await fetch("/Post/GetRichEditorPartial", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    })
 
-    parentDiv.innerHTML = editDivContent;
-    postArea.innerText = originalPostContent;
+    .then(function(response) {
+        if(response.status === 200) {
+            return response.text();
+        }
+        else {
+            const err = new Error();
+            err.message = "Error loading editor!";
+            throw err;
+        }
+    })
+
+    .then(function(text) {
+        // Load RichEditor html page from response body by using DOMParser() to parse the html string
+        const richEditor = new DOMParser().parseFromString(
+            `${text}
+            <button class="btn btn-primary float-end" type="button" id="edit-button">Edit Post</button>`
+            , "text/html"
+        );
+
+        const richEditorBody = richEditor.querySelector("body");
+        richEditorBody.style.width = "100%";
+        parentDiv.appendChild(richEditor.firstChild);
+        
+        // Load the RichEditor.js script
+        const script = document.createElement("script");
+        script.src = `${window.location.origin}/js/RichEditor.js`;
+        parentDiv.appendChild(script);
+    })
+
+    .catch(function(reject) {
+        showToast(reject.message, "warning");
+    });
+    
+    // Set postArea variable required by RichEditor.js file and copy original PostContent to postArea
+    const postArea = document.getElementById("post-area-div");
+    postArea.innerHTML = originalPostContent;
+
+    // Action to perform on clicking Cancel Edit button
+    const cancelEditButton = document.getElementById("cancel-edit-button");
+    cancelEditButton.addEventListener("click", function() {
+        parentDiv.innerHTML = innerHtmlStore;
+        
+        postScript.parentNode.removeChild(postScript);
+        const newPostScript = document.createElement("script");
+        newPostScript.src = `${window.location.origin}/js/Post.js`;
+        parentDiv.append(newPostScript);
+    });
 }
 
 // Create Post
