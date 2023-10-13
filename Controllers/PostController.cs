@@ -18,6 +18,11 @@ public class PostController : Controller {
     }
 
     [HttpPost]
+    public IActionResult GetRichEditorPartial() {
+        return PartialView("_RichEditor");
+    }
+
+    [HttpPost]
     public IActionResult CreatePost([FromBody] PostInfoModel Post) {
         if(Post == null) {
             const string response = "Error in received data";
