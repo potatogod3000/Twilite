@@ -3,7 +3,7 @@
 }
 
 <div class="card col-sm-11 mx-2 my-1">
-    <div class="card-body">
+    <div class="card-body" id="post-@Post.PostId">
         
         @* Display user actions i.e., dropdown of actions for current post and user *@
         <div class="row">
@@ -27,8 +27,8 @@
         </div>
 
         @* Render the body of post after converting HTML content to plain text *@
-        <div class="my-2 px-2 pt-2 pb-0 border-top">
-            <p>@Html.Raw(Post.PostContent)</p>
+        <div class="my-2 px-2 pt-2 pb-0 border-top" id="post-@Post.PostId-content">
+            @Html.Raw(Post.PostContent)
         </div>
 
         @* Post action buttons i.e., Like, Reply and Share *@

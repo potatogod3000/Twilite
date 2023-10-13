@@ -6,26 +6,30 @@
 
 <h1 class="text-center display-4">@ViewData["Title"] <span class="text-primary">&#x40;@User.Identity.Name</span></h1>
 
-<form method="post" class="row justify-content-center">
+<form class="row justify-content-center">
     <div class="card border-0">
 
-        <div asp-validation-summary="All" class="text-danger"></div>
+        
         <textarea asp-for="PostContent" id="post-area" hidden></textarea>
         <partial name="_RichEditor" />
         
         <div class="text-end mb-2">
-            <button id="post-button" class="btn btn-primary" type="submit">Post</button>
+            <button id="post-button" class="btn btn-primary" type="button">Post</button>
         </div>
     
     </div>
 </form>
 
+<script src="~/js/Post.js"></script>
 <script>
     button = document.getElementById("post-button");
-    document.addEventListener("DOMContentLoaded", function() {
+    @* document.addEventListener("DOMContentLoaded", function() {
         postArea.innerHTML = hiddenPostArea.innerText;
+    }); *@
+
+    button.addEventListener("click", function() {
+        createPost(currentUserName, postArea.innerHTML);
     });
-    button.addEventListener("click", onPost);
 </script>
 
 @section Scripts {

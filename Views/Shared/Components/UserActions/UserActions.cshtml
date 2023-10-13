@@ -26,12 +26,16 @@
                         <i class="bi bi-sliders me-2"></i>Manage Profile
                     </a></li>
                     <div class="dropdown-divider"></div>
-                    <li><a asp-controller="Post" asp-action="EditPost" asp-route-PostId="@CurrentPostModel.PostId" class="dropdown-item text-primary">
+                    <li><a class="dropdown-item text-primary" id="edit-post">
                         <i class="bi bi-pen me-2"></i>Edit
                     </a></li>
-                    <li><a asp-controller="Post" asp-action="DeletePost" asp-route-PostId="@CurrentPostModel.PostId" class="dropdown-item text-danger">
+                    <li><a class="dropdown-item text-danger" id="delete-post">
                         <i class="bi bi-trash me-2"></i>Delete
                     </a></li>
+
+                    <script>
+                        currentUserPostIds.push(@CurrentPostModel.PostId);
+                    </script>
 
                 }
                 
